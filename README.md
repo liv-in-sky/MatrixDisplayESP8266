@@ -29,6 +29,10 @@ Eine weitere Hilfe ist auf folgender Seite zu finden:
 
 https://www.schellenberger.biz/matrix-display-fuer-homematic-im-nachbau/
 
+und im IOBroker Forum: 
+
+https://forum.iobroker.net/viewtopic.php?f=35&t=20891&p=219001#p219001
+
 
 ![Sample1](/images/Sample1.png)
 
