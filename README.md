@@ -13,7 +13,7 @@ Folgende Modi sind vorhanden:
 - 4 - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
 - 5 - wie Mode 3 mit Uhrzeit
 
-Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die schalter nach der definierten Zeit!
+Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
 
 Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu. Beispiel-Url für IOBroker: 
 
