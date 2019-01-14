@@ -17,7 +17,7 @@ Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte e
 
 Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu. Beispiel-Url für IOBroker: 
 
-Url für Daten werden wim Orginal angelegt
+Url für Daten werden wie Orginal angelegt
 - http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix IOBroker: control-own.0.ESPMatrix.Matrix
 anschliessend müssen noch weitere Datenpunkte in IOBroker angelegt werden. Diese müssen notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
 - control-own.0.ESPMatrix.MatrixMode
