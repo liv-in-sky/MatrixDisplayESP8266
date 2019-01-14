@@ -9,6 +9,7 @@
 #include "WM.h"
 #include <ArduinoOTA.h>
 
+
 char refreshSeconds[10] = "60";
 char scrollPause[10] = "5";
 char url[255] = "";
@@ -16,6 +17,7 @@ char scrollSpeed[10] = "25";
 
 textEffect_t scrollEffectIn  = PA_SCROLL_LEFT;
 textEffect_t scrollEffectOut = PA_SCROLL_UP;
+textEffect_t scrollEffectRight  = PA_SCROLL_RIGHT;
 textPosition_t scrollAlign   = PA_CENTER;
 
 String configFilename     = "sysconf.json";
@@ -51,6 +53,14 @@ int intensity = 0;
 int modeCnt = 0;
 byte timeSetTryCount = 0;
 
+//settingString ist variable für laufen: festehend ist aus - laufen ist ein
+String settingString = "\"nein\"";
+String settingStringAlt;
+bool schalten = false;
+int modus = 2;
+int modusAlt =9 ;
+bool shutty = false;
+
 //WifiManager - don't touch
 #define IPSIZE              16
 bool shouldSaveConfig        = false;
@@ -75,8 +85,9 @@ WiFiUDP CNTRLudp;
 bool key1last = false;
 bool key2last = false;
 
+
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(57600);
   pinMode(key1, INPUT_PULLUP);
   pinMode(key2, INPUT_PULLUP);
   P.begin();
@@ -87,7 +98,7 @@ void setup() {
   P.addChar('-', line);
   P.addChar('_', block);
   P.addChar('?', heart);
-  P.displayText("Starte...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
+  P.displayText("run ...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
   P.displayAnimate();
 
   if (digitalRead(key1) == LOW || digitalRead(key2) == LOW) {
@@ -97,7 +108,7 @@ void setup() {
   if (!SPIFFS.begin()) {
     Serial.println("Failed to mount file system");
   } else {
-    if (!loadSysConfig()) {
+     if (!loadSysConfig()) {
       Serial.println("Failed to load config");
       startWifiManager = true;
     } else {
@@ -121,6 +132,7 @@ void setup() {
         P.displayText("NTP FAILURE", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
         P.displayAnimate();
         delay(2000);
+        Serial.println("RESTART Time");
         ESP.restart();
       }
     }
@@ -150,25 +162,63 @@ void loop() {
     key1last = false;
   }
 
-  if (digitalRead(key2) == LOW ) {
-    if (!key2last) {
-      key2last = true;
-      modeCnt++;
-      if (modeCnt > valueCount + 1) modeCnt = 0;
-      Serial.println("Mode: " + String(modeCnt));
-      delay(50);
+  
+  // Serial.println("wird geschaltet : " +  String(schalten));
+  if (digitalRead(key2) == LOW) {
+delay(700);
+    modus++;
+   if (modus > 5) modus=0;
+  String yyy =(String)modus;
+  yyy = "Mode: " + yyy;
+  Serial.println(yyy);
+  P.displayShutdown(false);
+   P.displayText("yyy", PA_CENTER, 25, 10, PA_PRINT, PA_PRINT);
+        
+        
+        P.displayAnimate();
+        
+//    if (schalten) Serial.println("es wurde geschaltet : " +  String(schalten));
+//    schalten = false;
+//    
+//    if (!key2last) {
+//      key2last = true;
+//      modeCnt++;
+//      
+//      if (modeCnt > valueCount + 1) modeCnt = 0;
+//      Serial.println("Mode: " + String(modeCnt));
+//      delay(50);
+//    }
+//  } else {
+//    key2last = false;
     }
-  } else {
-    key2last = false;
-  }
+
+  //Serial.println("get Setting " + loadSettingFromURL());
 
   String udpMessage = handleUDP();
 
   if (((millis() - lastMillis > String(refreshSeconds).toInt() * 1000) || lastMillis == 0 || udpMessage == "update") && String(url) != "") {
     Serial.println("Fetching data from URL...");
-    String valueString = loadDataFromURL();
+    String valueString = "";
+    memset(valueArray,0,sizeof(valueArray));
+    valueString = loadDataFromURL();
+    
+    settingStringAlt = settingString;
+    settingString = loadSettingFromURL();
+    Serial.println( String(settingString) + " ALT: " + String(settingStringAlt));
+    if (settingString != settingStringAlt) schalten = true;
+    
+    modus = loadModeFromURL();
+    if (modusAlt !=modus) shutty=false;
+    modusAlt=modus;
+    Serial.println( "Modus von IOBROKER ist : " + String(modus));
+
+    intensity = loadIntensityFromURL();
+    Serial.println( "Intensity von IOBROKER ist : " + String(modus));
+    P.setIntensity(intensity);
+    
     char buf[valueString.length() + 1];
     valueString.toCharArray(buf, sizeof(buf));
+    Serial.println("buf : " + String(buf));
     char *p = buf;
     char *str;
     valueCount = 0;
@@ -176,8 +226,147 @@ void loop() {
       valueArray[valueCount] = str;
       valueCount++;
     }
+    memset(buf,0,sizeof(buf));
+   
+   // Serial.println("buf : " + String(buf));
+   Serial.println("valuecCount  : " + String(valueCount));
     lastMillis = millis();
   }
+    if (!shutty) P.displayShutdown(false);
+   switch (modus) {
+
+    case 0:  {
+             P.displayShutdown(true);
+             shutty = true;
+              break;
+             }
+
+    case 1:  {
+             if (P.displayAnimate())
+    {
+        
+      loopCount++;
+      if (loopCount > valueCount || valueCount == 0) {
+        String Zeit = calcTime(now());
+        Zeit.toCharArray(curMessage, 10);
+        loopCount = -1;
+      } else {
+        String currentValue = valueArray[loopCount];
+        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+      
+      
+      }
+      //memset(valueArray,0,sizeof(valueArray));
+      P.displayReset();
+      P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectOut);
+       P.displayAnimate();
+    }    
+  
+              break;
+             }
+         
+    case 2:  {
+             String Zeit = calcTime(now());
+             Zeit.toCharArray(curMessage, 10);
+             P.displayReset();
+             P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+             P.displayAnimate();
+             break;
+             }
+             
+    case 3:  {
+          if (P.displayAnimate())
+    {
+        
+      loopCount++;
+      if (loopCount > valueCount || valueCount == 0) {
+       // String Zeit = calcTime(now());
+       // Zeit.toCharArray(curMessage, 10);
+        loopCount = -1;
+      } else {
+        String currentValue = valueArray[loopCount];
+        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+      
+      
+      }
+      //memset(valueArray,0,sizeof(valueArray));
+      P.displayReset();
+      P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), 0, scrollEffectIn, scrollEffectIn);
+       P.displayAnimate();
+    }    
+  
+             
+  
+              break;
+             }
+
+
+      case 4:  {
+             if (P.displayAnimate())
+    {
+   
+      
+      
+      loopCount++;
+      if (loopCount > valueCount || valueCount == 0) {
+        String Zeit = calcTime(now());
+        Zeit.toCharArray(curMessage, 10);
+        loopCount = -1;
+      } else {
+        String currentValue = valueArray[loopCount];
+        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+      
+      
+      }
+      //memset(valueArray,0,sizeof(valueArray));
+      P.displayReset();
+      P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectRight);
+       P.displayAnimate();
+    }    
+
+  
+              break;
+             }
+             
+    case 5:  {
+             if (P.displayAnimate())
+    {
+   
+      
+      
+      loopCount++;
+      if (loopCount > valueCount || valueCount == 0) {
+        String Zeit = calcTime(now());
+        Zeit.toCharArray(curMessage, 10);
+        loopCount = -1;
+      } else {
+        String currentValue = valueArray[loopCount];
+        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+      
+      
+      }
+      //memset(valueArray,0,sizeof(valueArray));
+      P.displayReset();
+      P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), 0, scrollEffectIn, scrollEffectIn);
+      //P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectIn);
+       P.displayAnimate();
+    }    
+
+
+     
+       
+  
+              break;
+             }
+              default: {
+        P.displayText("No Mode", PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+             P.displayAnimate();
+             break;
+      }
+             
+   } 
+   
+/*
 
   if (modeCnt == 0) {
     if (P.displayAnimate())
@@ -206,8 +395,9 @@ void loop() {
 
     P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
     P.displayAnimate();
-  }
+  }*/
 }
+
 
 String loadDataFromURL() {
   if (WiFi.status() == WL_CONNECTED) {
@@ -234,6 +424,92 @@ String loadDataFromURL() {
     }
     Serial.println("getState payload = " + payload);
     return payload;
-  } else ESP.restart();
+  } else 
+        Serial.println("RESTART URL");
+        ESP.restart();
 }
 
+String loadSettingFromURL() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.setTimeout(3000);
+   // Serial.println("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixSetting");
+    //Serial.println("getState url: " + String(url));
+     String url1 = url;
+    http.begin(url1+ "Setting");
+    //http.begin("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixSetting");
+    int httpCode = http.GET();
+    String payload = "error";
+    if (httpCode > 0) {
+      payload = http.getString();
+    }
+    if (httpCode != 200) {
+      Serial.println("Matrix Setting " + String(url) + " fail");
+      payload = " HTTP ERROR ";
+    }
+    http.end();
+
+   
+    Serial.println("getState matrix setting = " + payload);
+    return payload;
+  } else Serial.println("RESTART SETTING");
+      ESP.restart();
+}
+
+int loadModeFromURL() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.setTimeout(3000);
+   // Serial.println("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixMode");
+    //Serial.println("getState url: " + String(url));
+    String url1 = url;
+    http.begin(url1+ "Mode");
+    //http.begin("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixMode");
+    int httpCode = http.GET();
+    String payload = "error";
+    if (httpCode > 0) {
+      payload = http.getString();
+    }
+    if (httpCode != 200) {
+      Serial.println("Matrix Setting " + String(url) + " fail");
+      payload = " HTTP ERROR ";
+    }
+    http.end();
+
+   
+    Serial.println("getState matrix setting = " + payload);
+    payload.replace("\"", "");
+    int xxx = payload.toInt();
+    return xxx;
+  } else Serial.println("RESTART MODE");
+      ESP.restart();
+}
+      int loadIntensityFromURL() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.setTimeout(3000);
+   // Serial.println("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixIntensity");
+    //Serial.println("getState url: " + String(url));
+    String url1 = url;
+    http.begin(url1+ "Intensity");
+    //http.begin("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixMode");
+    int httpCode = http.GET();
+    String payload = "error";
+    if (httpCode > 0) {
+      payload = http.getString();
+    }
+    if (httpCode != 200) {
+      Serial.println("Matrix Setting " + String(url) + " fail");
+      payload = " HTTP ERROR ";
+    }
+    http.end();
+
+   
+    Serial.println("getState matrix setting = " + payload);
+    payload.replace("\"", "");
+    int xxx = payload.toInt();
+    if (xxx < 0 || xxx > 14) xxx=0;
+    return xxx;
+  } else Serial.println("RESTART INTENSITY");
+      ESP.restart();
+}
