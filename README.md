@@ -22,6 +22,7 @@ Url für Daten werden wim Orginal angelegt
 anschliessend müssen noch weitere Datenpunkte in IOBroker angelegt werden. Diese müssen notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
 - control-own.0.ESPMatrix.MatrixMode
 - control-own.0.ESPMatrix.MatrixIntensity
+
 ALLE DATENPUNKTE SIND TEXTFELDER
 
 ![Sample1](/images/Sample1.png)
