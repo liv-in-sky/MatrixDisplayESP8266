@@ -25,7 +25,7 @@ anschliessend müssen noch weitere Datenpunkte in IOBroker angelegt werden. Dies
 
 ALLE DATENPUNKTE SIND TEXTFELDER
 
-Eine weitere Hilfe ist auf folgender Seite zu finden:
+Eine weitere Hilfe für den Bau ist auf folgender Seite zu finden:
 
 https://www.schellenberger.biz/matrix-display-fuer-homematic-im-nachbau/
 
