@@ -167,33 +167,21 @@ void loop() {
   if (digitalRead(key2) == LOW) {
 delay(700);
     modus++;
-   if (modus > 5) modus=0;
-  String yyy =(String)modus;
-  yyy = "Mode: " + yyy;
-  Serial.println(yyy);
-  P.displayShutdown(false);
-   P.displayText("yyy", PA_CENTER, 25, 10, PA_PRINT, PA_PRINT);
-        
-        
-        P.displayAnimate();
-        
-//    if (schalten) Serial.println("es wurde geschaltet : " +  String(schalten));
-//    schalten = false;
-//    
-//    if (!key2last) {
-//      key2last = true;
-//      modeCnt++;
-//      
-//      if (modeCnt > valueCount + 1) modeCnt = 0;
-//      Serial.println("Mode: " + String(modeCnt));
-//      delay(50);
-//    }
-//  } else {
-//    key2last = false;
-    }
-
-  //Serial.println("get Setting " + loadSettingFromURL());
-
+    if (modus > 5) modus=0;
+    String yyy =(String)modus;
+    yyy = "Mode: " + yyy;
+    Serial.println(yyy);
+    P.displayShutdown(false);
+    yyy.toCharArray(curMessage, yyy.length() +1);
+    P.displayText(curMessage, PA_CENTER, 25, 10, PA_PRINT, PA_PRINT);
+//    delay(100);
+//    setModeToURL(modus);
+//    Serial.println("nach Funktion");
+//    delay(100);
+    P.displayAnimate();
+    
+    delay(500);
+  }   
   String udpMessage = handleUDP();
 
   if (((millis() - lastMillis > String(refreshSeconds).toInt() * 1000) || lastMillis == 0 || udpMessage == "update") && String(url) != "") {
@@ -202,11 +190,7 @@ delay(700);
     memset(valueArray,0,sizeof(valueArray));
     valueString = loadDataFromURL();
     
-    settingStringAlt = settingString;
-    settingString = loadSettingFromURL();
-    Serial.println( String(settingString) + " ALT: " + String(settingStringAlt));
-    if (settingString != settingStringAlt) schalten = true;
-    
+   
     modus = loadModeFromURL();
     if (modusAlt !=modus) shutty=false;
     modusAlt=modus;
@@ -366,36 +350,6 @@ delay(700);
              
    } 
    
-/*
-
-  if (modeCnt == 0) {
-    if (P.displayAnimate())
-    {
-      loopCount++;
-      if (loopCount > valueCount || valueCount == 0) {
-        String Zeit = calcTime(now());
-        Zeit.toCharArray(curMessage, 10);
-        loopCount = -1;
-      } else {
-        String currentValue = valueArray[loopCount];
-        currentValue.toCharArray(curMessage, currentValue.length() + 1);
-      }
-      P.displayReset();
-      P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectOut);
-    }
-  } else {
-    if (valueCount > 0) {
-      String currentValue = valueArray[modeCnt - 1];
-      currentValue.toCharArray(curMessage, currentValue.length() + 1);
-    }
-    if (modeCnt > valueCount) {
-      String Zeit = calcTime(now());
-      Zeit.toCharArray(curMessage, 10);
-    }
-
-    P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
-    P.displayAnimate();
-  }*/
 }
 
 
@@ -429,42 +383,15 @@ String loadDataFromURL() {
         ESP.restart();
 }
 
-String loadSettingFromURL() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.setTimeout(3000);
-   // Serial.println("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixSetting");
-    //Serial.println("getState url: " + String(url));
-     String url1 = url;
-    http.begin(url1+ "Setting");
-    //http.begin("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixSetting");
-    int httpCode = http.GET();
-    String payload = "error";
-    if (httpCode > 0) {
-      payload = http.getString();
-    }
-    if (httpCode != 200) {
-      Serial.println("Matrix Setting " + String(url) + " fail");
-      payload = " HTTP ERROR ";
-    }
-    http.end();
-
-   
-    Serial.println("getState matrix setting = " + payload);
-    return payload;
-  } else Serial.println("RESTART SETTING");
-      ESP.restart();
-}
 
 int loadModeFromURL() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.setTimeout(3000);
-   // Serial.println("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixMode");
-    //Serial.println("getState url: " + String(url));
+ 
     String url1 = url;
     http.begin(url1+ "Mode");
-    //http.begin("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixMode");
+    
     int httpCode = http.GET();
     String payload = "error";
     if (httpCode > 0) {
@@ -488,11 +415,10 @@ int loadModeFromURL() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.setTimeout(3000);
-   // Serial.println("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixIntensity");
-    //Serial.println("getState url: " + String(url));
+   
     String url1 = url;
     http.begin(url1+ "Intensity");
-    //http.begin("http://192.168.178.59:8087/getPlainValue/controll-own.0.MatrixMode");
+    
     int httpCode = http.GET();
     String payload = "error";
     if (httpCode > 0) {
@@ -511,5 +437,41 @@ int loadModeFromURL() {
     if (xxx < 0 || xxx > 14) xxx=0;
     return xxx;
   } else Serial.println("RESTART INTENSITY");
+      ESP.restart();
+}
+
+// WIRD NOCH GETESTET !!
+      void setModeToURL(int modeOut) {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.setTimeout(3000);
+   
+    Serial.println("ModeOut: " + modeOut);
+    String url1 = url;
+    url1= url1 + "Mode?value=";
+    url1.replace("getPlainValue", "set");
+    url1=url1 + (String)modeOut;
+    //url1=url1 + "&prettyPrint";
+    //http.begin(url1+ "");
+    Serial.println(url1);
+    delay (500);
+    //http.begin(url1);
+    http.begin("http://192.168.178.59:8087/set/controll-own.0.MatrixMode?value=5");
+    int httpCode = http.GET();
+    Serial.println(httpCode);
+//  String payload = "error";
+//   if (httpCode > 0) {
+//     Serial.println("RESTART MODEOUT");
+//      ESP.reset();
+//    }
+//    if (httpCode != 200) {
+//     Serial.println("Matrix ModeLoad " + String(url) + " fail");
+//      payload = " HTTP ERROR ";
+//    }
+    http.end();
+
+   
+   
+  } else Serial.println("RESTART MODEOUT");
       ESP.restart();
 }
