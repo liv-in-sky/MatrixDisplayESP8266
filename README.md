@@ -1,5 +1,20 @@
 # MatrixDisplayESP8266
 
+
+folgende Änderungen zum Orginal:
+- Einführung von Modi
+- Schalter optional (durch IOBroker ausführbar)
+
+Folgende Modi sind vorhanden:
+0 - display aus
+1 - wie Orginal - Text (Daten) kommen von rechts und gehen nach oben - mit Uhrzeit
+2 - nur Uhrzeit - feststehend
+3 - Daten laufen von rechts nach links durch - ohne Uhrzeit
+4 - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
+5 - wie Mode 3 mit Uhrzeit
+
+Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar
+
 ![Sample1](/images/Sample1.png)
 
 
