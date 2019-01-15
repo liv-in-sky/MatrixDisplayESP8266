@@ -3,9 +3,9 @@
 
 **folgende Änderungen zum Orginal:**
 ```diff
-- Einführung von Modi
-- Schalter optional (durch IOBroker ausführbar)
-- Umlaute unterstützt
++ Einführung von Modi
++ Schalter optional (durch IOBroker ausführbar)
++ Umlaute unterstützt
 ```
 
 
