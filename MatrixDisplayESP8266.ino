@@ -59,6 +59,7 @@ String settingStringAlt;
 bool schalten = false;
 int modus = 2;
 int modusAlt =9 ;
+int modusCase=2;
 bool shutty = false;
 
 //WifiManager - don't touch
@@ -167,7 +168,7 @@ void loop() {
   if (digitalRead(key2) == LOW) {
 delay(700);
     modus++;
-    if (modus > 5) modus=0;
+    if (modus > 7) modus=0;
     String yyy =(String)modus;
     yyy = "Mode: " + yyy;
     Serial.println(yyy);
@@ -192,12 +193,12 @@ delay(700);
     
    
     modus = loadModeFromURL();
-    if (modusAlt !=modus) shutty=false;
+    if (modusAlt != modus) shutty=false;
     modusAlt=modus;
     Serial.println( "Modus von IOBROKER ist : " + String(modus));
 
     intensity = loadIntensityFromURL();
-    Serial.println( "Intensity von IOBROKER ist : " + String(modus));
+    Serial.println( "Intensity von IOBROKER ist : " + String(intensity));
     P.setIntensity(intensity);
     
     char buf[valueString.length() + 1];
@@ -313,11 +314,10 @@ delay(700);
              }
              
     case 5:  {
+      modusCase=5;
              if (P.displayAnimate())
     {
    
-      
-      
       loopCount++;
       if (loopCount > valueCount || valueCount == 0) {
         String Zeit = calcTime(now());
@@ -336,20 +336,49 @@ delay(700);
        P.displayAnimate();
     }    
 
+              break;
+             }
+//STEHEND EIN WERT
+      case 6:  {
 
-     
-       
+        String currentValue = valueArray[0];
+        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+
+        P.displayReset();
+        P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+        P.displayAnimate();
+
+     break;
+       }
+
+//BLINKEND EIN WERT
+              case 7:  {
+   
+    modusCase=7;
+      
+             if (P.displayAnimate())
+    {
+      
+      delay(750);
+      String currentValue = valueArray[0];
+      currentValue.toCharArray(curMessage, currentValue.length() + 1);
+  
+     P.displayReset();
+     P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+     P.displayAnimate();
+       delay(750);
+    }    
+
   
               break;
              }
-              default: {
-        P.displayText("No Mode", PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+    
+      default: {
+             P.displayText("No Mode", PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
              P.displayAnimate();
              break;
-      }
-             
+      }     
    } 
-   
 }
 
 
@@ -443,8 +472,7 @@ int loadModeFromURL() {
 // WIRD NOCH GETESTET !!
       void setModeToURL(int modeOut) {
   if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.setTimeout(3000);
+   
    
     Serial.println("ModeOut: " + modeOut);
     String url1 = url;
@@ -454,11 +482,13 @@ int loadModeFromURL() {
     //url1=url1 + "&prettyPrint";
     //http.begin(url1+ "");
     Serial.println(url1);
+     HTTPClient http;
+    http.setTimeout(3000);
     delay (500);
-    //http.begin(url1);
-    http.begin("http://192.168.178.59:8087/set/controll-own.0.MatrixMode?value=5");
-    int httpCode = http.GET();
-    Serial.println(httpCode);
+    
+    http.begin(url1);
+  //  int httpCode = http.GET();
+ //   Serial.println(httpCode);
 //  String payload = "error";
 //   if (httpCode > 0) {
 //     Serial.println("RESTART MODEOUT");
@@ -468,6 +498,7 @@ int loadModeFromURL() {
 //     Serial.println("Matrix ModeLoad " + String(url) + " fail");
 //      payload = " HTTP ERROR ";
 //    }
+    delay(350);
     http.end();
 
    
