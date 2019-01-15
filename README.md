@@ -22,6 +22,8 @@ Umlaute sollten auch funktionieren - falls damit Probleme auftreten, könnte es 
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
 
+Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mit dem Standardport 8087.
+
 Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu.
 
 Url für Daten werden wie Orginal angelegt
@@ -41,7 +43,12 @@ und im IOBroker Forum:
 https://forum.iobroker.net/viewtopic.php?f=35&t=20891&p=219001#p219001
 
 
-Für Interessierte: mit Tasker kann man mit dem Handy auch das Display steuern.
+Für Interessierte: mit Tasker kann man das Display via Handy und (durch) IOBroker steuern. 
+Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mit dem Standardport 8087.
+Anschliessend einen Task mit http Get hinzufügen:
+Server:Port:  "192.168.xxx.xxx:8078"
+Path: "set/control-own.0.ESPMatrix.Matrix?value=yyy"
+Mime Type: "text/*"
 
 
 
