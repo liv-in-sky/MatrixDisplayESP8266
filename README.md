@@ -6,7 +6,7 @@
 - Einführung von Modi
 - Schalter optional (durch IOBroker ausführbar)
 - Umlaute unterstützt
-
+```
 
 
 Folgende Modi sind vorhanden:
