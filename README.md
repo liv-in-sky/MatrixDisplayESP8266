@@ -35,8 +35,8 @@ anschliessend müssen noch weitere Datenpunkte in IOBroker angelegt werden. Dies
 - control-own.0.ESPMatrix.MatrixMode
 - control-own.0.ESPMatrix.MatrixIntensity
 
-```js
-+ALLE DATENPUNKTE SIND TEXTFELDER
+```diff
++    !!!      ALLE DATENPUNKTE MÜSSEN ALS TEXTFELDER DEFININIERT SEIN     !!!
 ```
 Eine weitere Hilfe für den Bau ist auf folgender Seite zu finden:
 
