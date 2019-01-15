@@ -13,7 +13,7 @@ Folgende Modi sind vorhanden:
 - 4 - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
 - 5 - wie Mode 3 mit Uhrzeit
 - 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
-- 6 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten)
+- 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten)
 
 Umlaute sollten durch IOBroker script eliminiert werden
 
