@@ -18,6 +18,8 @@ Folgende Modi sind vorhanden:
 
 Umlaute sollten auch funktionieren - falls damit Probleme auftreten, könnte es sein, dass man eine Libriary austauschen muss
 
+![Sampleum](/images/Sampleum.png)
+
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
 
 Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu.
