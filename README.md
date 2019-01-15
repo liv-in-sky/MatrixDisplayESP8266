@@ -16,7 +16,7 @@ Folgende Modi sind vorhanden:
 - 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
 - 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten)
 
-Umlaute sollten auch funktionieren - falls damit Probleme auftreten, könnte es sein, dass man eine Libriary austauschen muss
+Umlaute sollten auch funktionieren - falls damit Probleme auftreten, könnte es sein, dass man eine Libriary austauschen muss. Diese findet man unter dem help-Ordner. die Datei muss in den Sketch library-Ordner (aber vorher ohne ausprobieren!)
 
 ![Sampleum](/images/Sampleum.png)
 
