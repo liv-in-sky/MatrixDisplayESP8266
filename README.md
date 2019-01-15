@@ -2,7 +2,7 @@
 
 
 **folgende Änderungen zum Orginal:**
-```js
+```diff
 - Einführung von Modi
 - Schalter optional (durch IOBroker ausführbar)
 - Umlaute unterstützt
