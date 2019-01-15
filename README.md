@@ -2,11 +2,12 @@
 
 
 **folgende Änderungen zum Orginal:**
+```diff
 - Einführung von Modi
 - Schalter optional (durch IOBroker ausführbar)
 - Umlaute unterstützt
-```diff
-+ - Umlaute unterstützt
+
+
 
 Folgende Modi sind vorhanden:
 - 0 - display aus
