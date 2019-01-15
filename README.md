@@ -19,10 +19,10 @@ Umlaute sollten durch IOBroker script eliminiert werden
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
 
-Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu. Beispiel-Url für IOBroker: 
+Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu.
 
 Url für Daten werden wie Orginal angelegt
-- http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix IOBroker: control-own.0.ESPMatrix.Matrix
+- http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix (IOBroker-Baum: control-own.0.ESPMatrix.Matrix)
 anschliessend müssen noch weitere Datenpunkte in IOBroker angelegt werden. Diese müssen notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
 - control-own.0.ESPMatrix.MatrixMode
 - control-own.0.ESPMatrix.MatrixIntensity
@@ -36,6 +36,9 @@ https://www.schellenberger.biz/matrix-display-fuer-homematic-im-nachbau/
 und im IOBroker Forum: 
 
 https://forum.iobroker.net/viewtopic.php?f=35&t=20891&p=219001#p219001
+
+
+Für Interessierte: mit Tasker kann man mit dem Handy auch das Display steuern.
 
 
 ![Sample1](/images/Sample1.png)
