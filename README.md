@@ -4,6 +4,7 @@
 **folgende Änderungen zum Orginal:**
 - Einführung von Modi
 - Schalter optional (durch IOBroker ausführbar)
+- Umlaute unterstützt
 
 Folgende Modi sind vorhanden:
 - 0 - display aus
@@ -15,7 +16,7 @@ Folgende Modi sind vorhanden:
 - 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
 - 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten)
 
-Umlaute sollten durch IOBroker script eliminiert werden
+Umlaute sollten auch funktionieren - falls damit Probleme auftreten, könnte es sein, dass man eine Libriary austauschen muss
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
 
