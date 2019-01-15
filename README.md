@@ -12,6 +12,10 @@ Folgende Modi sind vorhanden:
 - 3 - Daten laufen von rechts nach links durch - ohne Uhrzeit
 - 4 - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
 - 5 - wie Mode 3 mit Uhrzeit
+- 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
+- 6 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten)
+
+Umlaute sollten durch IOBroker script eliminiert werden
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
 
