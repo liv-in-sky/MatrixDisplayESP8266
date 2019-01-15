@@ -237,7 +237,8 @@ delay(700);
         loopCount = -1;
       } else {
         String currentValue = valueArray[loopCount];
-        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+       findeUmlaut(currentValue).toCharArray(curMessage, currentValue.length() + 1);
+        ersetzeUmlaut(curMessage, currentValue.length() + 1);
       
       
       }
@@ -270,7 +271,8 @@ delay(700);
         loopCount = -1;
       } else {
         String currentValue = valueArray[loopCount];
-        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+        findeUmlaut(currentValue).toCharArray(curMessage, currentValue.length() + 1);
+        ersetzeUmlaut(curMessage, currentValue.length() + 1);
       
       
       }
@@ -299,8 +301,8 @@ delay(700);
         loopCount = -1;
       } else {
         String currentValue = valueArray[loopCount];
-        currentValue.toCharArray(curMessage, currentValue.length() + 1);
-      
+        findeUmlaut(currentValue).toCharArray(curMessage, currentValue.length() + 1);
+        ersetzeUmlaut(curMessage, currentValue.length() + 1);
       
       }
       //memset(valueArray,0,sizeof(valueArray));
@@ -314,7 +316,7 @@ delay(700);
              }
              
     case 5:  {
-      modusCase=5;
+      
              if (P.displayAnimate())
     {
    
@@ -325,7 +327,8 @@ delay(700);
         loopCount = -1;
       } else {
         String currentValue = valueArray[loopCount];
-        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+        findeUmlaut(currentValue).toCharArray(curMessage, currentValue.length() + 1);
+        ersetzeUmlaut(curMessage, currentValue.length() + 1);
       
       
       }
@@ -342,9 +345,11 @@ delay(700);
       case 6:  {
 
         String currentValue = valueArray[0];
-        currentValue.toCharArray(curMessage, currentValue.length() + 1);
+        findeUmlaut(currentValue).toCharArray(curMessage, currentValue.length() + 1);
+        ersetzeUmlaut(curMessage, currentValue.length() + 1);
 
         P.displayReset();
+    
         P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
         P.displayAnimate();
 
@@ -353,15 +358,14 @@ delay(700);
 
 //BLINKEND EIN WERT
               case 7:  {
-   
-    modusCase=7;
       
              if (P.displayAnimate())
     {
       
       delay(750);
       String currentValue = valueArray[0];
-      currentValue.toCharArray(curMessage, currentValue.length() + 1);
+      findeUmlaut(currentValue).toCharArray(curMessage, currentValue.length() + 1);
+      ersetzeUmlaut(curMessage, currentValue.length() + 1);
   
      P.displayReset();
      P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
@@ -372,6 +376,25 @@ delay(700);
   
               break;
              }
+
+  //STEHEND EIN WERT
+      case 8:  {
+
+     // for(int i = 0; i <=  currentValue.length() + 1; i++){
+       //if([i] == 'ü') curMessage[i]=char(129);
+
+        String currentValue = valueArray[0];
+        findeUmlaut(currentValue).toCharArray(curMessage, currentValue.length() + 1);
+        ersetzeUmlaut(curMessage, currentValue.length() + 1);
+     
+        P.displayReset();
+     
+       // P.displayText   (curMessage, PA_CENTER, 3, 1500, PA_PRINT , PA_PRINT);
+        P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+        P.displayAnimate();
+
+     break;
+       }
     
       default: {
              P.displayText("No Mode", PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
@@ -380,6 +403,38 @@ delay(700);
       }     
    } 
 }
+
+void ersetzeUmlaut (char* curMessage1, int lang){
+  
+      for(int i = 0; i <=  lang; i++){
+     
+            String aaa = String(curMessage1[i]);
+            if(aaa == "\130") curMessage1[i]=char(252);
+            if(aaa == "\131") curMessage1[i]=char(228);
+            if(aaa == "\132") curMessage1[i]=char(246);
+            if(aaa == "\133") curMessage1[i]=char(220);
+            if(aaa == "\134") curMessage1[i]=char(196);
+            if(aaa == "\135") curMessage1[i]=char(214);
+            if(aaa == "\136") curMessage1[i]=char(247);} //247
+            
+            }
+
+
+
+
+
+String findeUmlaut (String ummi) {
+  
+               ummi.replace("ü", "\130");
+               ummi.replace("ä", "\131");
+               ummi.replace("ö", "\132");
+               ummi.replace("Ü", "\133");
+               ummi.replace("Ä", "\134");
+               ummi.replace("Ö", "\135");
+               ummi.replace("°", "\136");
+       return ummi;
+  }
+
 
 
 String loadDataFromURL() {
@@ -406,6 +461,7 @@ String loadDataFromURL() {
       payload = payload.substring(1, payload.length() - 1);
     }
     Serial.println("getState payload = " + payload);
+   
     return payload;
   } else 
         Serial.println("RESTART URL");
