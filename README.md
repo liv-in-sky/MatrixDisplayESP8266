@@ -44,6 +44,13 @@ https://forum.iobroker.net/viewtopic.php?f=35&t=20891&p=219001#p219001
 Für Interessierte: mit Tasker kann man mit dem Handy auch das Display steuern.
 
 
+
+
+#    -----  von jp112sd übernommen    ----------
+
+
+
+
 ![Sample1](/images/Sample1.png)
 
 
