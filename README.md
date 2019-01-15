@@ -46,13 +46,14 @@ und im IOBroker Forum:
 https://forum.iobroker.net/viewtopic.php?f=35&t=20891&p=219001#p219001
 
 ```diff
-Für Interessierte: mit Tasker kann man das Display via Handy und (durch) IOBroker steuern. 
++Für Interessierte: mit Tasker kann man das Display via Handy und (durch) IOBroker steuern. 
 Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mit dem Standardport 8087.
 
 Anschliessend einen Task mit http Get hinzufügen:
 Server:Port:  "192.168.xxx.xxx:8078"
 Path: "set/control-own.0.ESPMatrix.Matrix?value=yyy"
 Mime Type: "text/*"
+und schon kann man gewünschte Daten (z.B. %BATT anstatt yyy) wie Handy-Akku an das Display senden.
 ```
 
 
