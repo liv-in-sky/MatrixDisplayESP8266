@@ -35,8 +35,9 @@ anschliessend müssen noch weitere Datenpunkte in IOBroker angelegt werden. Dies
 - control-own.0.ESPMatrix.MatrixMode
 - control-own.0.ESPMatrix.MatrixIntensity
 
-ALLE DATENPUNKTE SIND TEXTFELDER
-
+```js
++ALLE DATENPUNKTE SIND TEXTFELDER
+```
 Eine weitere Hilfe für den Bau ist auf folgender Seite zu finden:
 
 https://www.schellenberger.biz/matrix-display-fuer-homematic-im-nachbau/
