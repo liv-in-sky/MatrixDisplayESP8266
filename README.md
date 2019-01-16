@@ -59,7 +59,7 @@ und schon kann man gewünschte Daten (z.B. %BATT anstatt yyy) wie Handy-Akku an 
 ```diff
 Hinweis: Es gibt eine tolle Variante mit MQTT und Doppelzeilen Anzeige: 
 ```
-[(https://github.com/prysme01/DotMatrixDisplay)]
+(https://github.com/prysme01/DotMatrixDisplay)
 
 
 #    -----  von jp112sd übernommen    ----------
