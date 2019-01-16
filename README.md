@@ -5,7 +5,7 @@
 ```diff
 + Einführung von Modi
 + Schalter optional (durch IOBroker ausführbar)
-+ Umlaute unterstützt
++ die wichtigsten Sonderzeichen und Umlaute werden unterstützt (ok: "äöüÄÖÜ%°&,.:!/|+-()#" ko: "ß€[]{})
 ```
 
 
@@ -56,8 +56,9 @@ Path: "set/control-own.0.ESPMatrix.Matrix?value=yyy"
 Mime Type: "text/*"
 und schon kann man gewünschte Daten (z.B. %BATT anstatt yyy) wie Handy-Akku an das Display senden.
 ```
-
-
+```diff
+Hinweis: Es gibt eine tolle Variante mit MQTT und Doppelzeilen Anzeige: https://github.com/prysme01/DotMatrixDisplay
+```
 
 #    -----  von jp112sd übernommen    ----------
 
