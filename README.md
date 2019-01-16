@@ -15,9 +15,9 @@ Folgende Modi sind vorhanden:
 - 2 - nur Uhrzeit - feststehend
 - 3 - Daten laufen von rechts nach links durch - ohne Uhrzeit
 - 4 - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
-- 5 - wie Mode 3 mit Uhrzeit
+- 5 - Daten laufen von rechts nach links durch mit Uhrzeit
 - 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
-- 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten)
+- 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
 
 Umlaute sollten auch funktionieren - falls damit Probleme auftreten, könnte es sein, dass man eine Libriary austauschen muss. Diese findet man unter dem help-Ordner. die Datei muss in den Arduino-Sketch libraries-Ordner (aber vorher ohne ausprobieren!) werden. Pfad:"...\libraries\MD_MAX72XX\src"
 
