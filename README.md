@@ -57,9 +57,9 @@ Mime Type: "text/*"
 und schon kann man gewünschte Daten (z.B. %BATT anstatt yyy) wie Handy-Akku an das Display senden.
 ```
 ```diff
-Hinweis: Es gibt eine tolle Variante mit MQTT und Doppelzeilen Anzeige: [zumLink](https://github.com/prysme01/DotMatrixDisplay)]
+Hinweis: Es gibt eine tolle Variante mit MQTT und Doppelzeilen Anzeige: 
 ```
-
+[zumLink](https://github.com/prysme01/DotMatrixDisplay)]
 
 
 #    -----  von jp112sd übernommen    ----------
