@@ -5,7 +5,7 @@
 ```diff
 + Einführung von Modi
 + Schalter optional (durch IOBroker ausführbar)
-+ die wichtigsten Sonderzeichen und Umlaute werden unterstützt (ok: "äöüÄÖÜ%°&,.:!/|+-()#" ko: "ß€[]{})
++ Sonderzeichen und Umlaute werden unterstützt 
 ```
 
 
@@ -19,9 +19,9 @@ Folgende Modi sind vorhanden:
 - 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
 - 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
 
-Umlaute sollten auch funktionieren - falls damit Probleme auftreten, könnte es sein, dass man eine Libriary austauschen muss. Diese findet man unter dem help-Ordner. die Datei muss in den Arduino-Sketch libraries-Ordner (aber vorher ohne ausprobieren!) werden. Pfad:"...\libraries\MD_MAX72XX\src"
+WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den Arduino-Sketch-libraries-Ordner entpackt werden damit alles richtig kompiliert werden kann (u.U. müssen noch weitere Bibliotheken geladen werden))
 
-![Sampleum](/images/Sampleum.png)
+![Sampleum](/MatrixDisplayESP8266/images/Sampleum.png)
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
 
