@@ -67,7 +67,7 @@ https://github.com/prysme01/DotMatrixDisplay
 
 
 
-![Sample1](/images/Sample1.png)
+![Sample1](/MatrixDisplayESP8266/images/Sample1.png)
 
 
 ## benötigte Hardware
@@ -88,7 +88,7 @@ Taste2 | D2
 
 Die Taster an D1 und D2 sind gegen GND zu schalten. *(Pullup-Widerstand wird nicht benötigt)*
 
-![Konfiguration1](/images/Back1.jpg)
+![Konfiguration1](/MatrixDisplayESP8266/images/Back1.jpg)
 
 ## Programmierung 
 
@@ -112,14 +112,14 @@ Nach dem Verbinden mit diesem WLAN wird automatisch ein Popup des Konfigurations
 
 **WLAN konfigurieren** anklicken
 
-![Konfiguration1](/images/Konfiguration1.png)
+![Konfiguration1](/MatrixDisplayESP8266/images/Konfiguration1.png)
 
 
-![Konfiguration2](/images/Konfiguration2.png)
+![Konfiguration2](/MatrixDisplayESP8266/images/Konfiguration2.png)
 
 **Beispiel**
 
-![Konfiguration3](/images/Konfiguration3.png)
+![Konfiguration3](/MatrixDisplayESP8266/images/Konfiguration3.png)
 
 
 
