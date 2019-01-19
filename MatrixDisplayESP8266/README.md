@@ -1,4 +1,71 @@
-# MatrixDisplayESP8266
+# MatrixDisplayESP8266 fur IOBroker optimiert
+
+
+**folgende Änderungen zum Orginal:**
+```diff
++ Einführung von Modi
++ Schalter optional (durch IOBroker ausführbar)
++ die wichtigsten Sonderzeichen und Umlaute werden unterstützt (ok: "äöüÄÖÜ%°&,.:!/|+-()#" ko: "ß€[]{})
+```
+
+
+Folgende Modi sind vorhanden:
+- 0 - display aus
+- 1 - wie Orginal - Text (Daten) kommen von rechts und gehen nach oben - mit Uhrzeit
+- 2 - nur Uhrzeit - feststehend
+- 3 - Daten laufen von rechts nach links durch - ohne Uhrzeit
+- 4 - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
+- 5 - Daten laufen von rechts nach links durch mit Uhrzeit
+- 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
+- 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
+
+Umlaute sollten auch funktionieren - falls damit Probleme auftreten, könnte es sein, dass man eine Libriary austauschen muss. Diese findet man unter dem help-Ordner. die Datei muss in den Arduino-Sketch libraries-Ordner (aber vorher ohne ausprobieren!) werden. Pfad:"...\libraries\MD_MAX72XX\src"
+
+![Sampleum](/images/Sampleum.png)
+
+Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
+
+Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mit dem Standardport 8087.
+
+Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu.
+
+Url für Daten werden wie Orginal angelegt
+- http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix (IOBroker-Baum: control-own.0.ESPMatrix.Matrix)
+anschliessend müssen noch weitere Datenpunkte in IOBroker angelegt werden. Diese müssen notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
+- control-own.0.ESPMatrix.MatrixMode
+- control-own.0.ESPMatrix.MatrixIntensity
+
+```diff
+-                !!!      ALLE DATENPUNKTE MÜSSEN ALS TEXTFELDER DEFININIERT SEIN     !!!
+```
+Eine weitere Hilfe für den Bau ist auf folgender Seite zu finden:
+
+https://www.schellenberger.biz/matrix-display-fuer-homematic-im-nachbau/
+
+und im IOBroker Forum: 
+
+https://forum.iobroker.net/viewtopic.php?f=35&t=20891&p=219001#p219001
+
+```diff
++Für Interessierte: mit Tasker kann man das Display via Handy und (durch) IOBroker steuern. 
+Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mit dem Standardport 8087.
+
+Anschliessend einen Task mit http Get hinzufügen:
+Server:Port:  "192.168.xxx.xxx:8078"
+Path: "set/control-own.0.ESPMatrix.Matrix?value=yyy"
+Mime Type: "text/*"
+und schon kann man gewünschte Daten (z.B. %BATT anstatt yyy) wie Handy-Akku an das Display senden.
+```
+```diff
+Hinweis: Es gibt eine Variante mit MQTT : 
+```
+https://github.com/prysme01/DotMatrixDisplay
+
+
+#    -----  von jp112sd übernommen    ----------
+
+
+
 
 ![Sample1](/images/Sample1.png)
 
