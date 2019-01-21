@@ -6,11 +6,12 @@
 + Einführung von Modi
 + Schalter optional (durch IOBroker ausführbar)
 + Sonderzeichen und Umlaute werden unterstützt 
++ kleine Fehlerbehandlung mit Anzeige - bei falschen Werten
 ```
 
 
 Folgende Modi sind vorhanden:
-- 0 - display aus
+
 - 1 - wie Orginal - Text (Daten) kommen von rechts und gehen nach oben - mit Uhrzeit
 - 2 - nur Uhrzeit - feststehend
 - 3 - Daten laufen von rechts nach links durch - ohne Uhrzeit
@@ -18,6 +19,8 @@ Folgende Modi sind vorhanden:
 - 5 - Daten laufen von rechts nach links durch mit Uhrzeit
 - 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
 - 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
+- 8 - Daten kommen von oben - gehen wieder nach unten - mit Uhrzeit
+- 9 - display aus
 
 WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den Arduino-Sketch-libraries-Ordner entpackt werden damit alles richtig kompiliert werden kann (u.U. müssen noch weitere Bibliotheken geladen werden))
 
@@ -25,15 +28,18 @@ WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den A
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
 
+Auch die Satndardwerte, welche bei ersten Einrichten angegeben werden müssen, können übergeben werden (IOBroker). ScrollPause, ScrollSpeed und der wert, wie oft masn die Daten abholen will (Refresh Time).
+
+Die Standard(Config)-Werte werden wie die zu anzeigenden Daten übergeben. Z.B 5;1;60;5;29 . In der Reihenfolge bedeutend: <Mode>; <Intensity(Helligkeit)><;<RefreshTime>;<ScrollPause>;<ScrolSpeed>
+
 Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mit dem Standardport 8087.
 
 Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu.
 
 Url für Daten werden wie Orginal angelegt
 - http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix (IOBroker-Baum: control-own.0.ESPMatrix.Matrix)
-anschliessend müssen noch weitere Datenpunkte in IOBroker angelegt werden. Diese müssen notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
-- control-own.0.ESPMatrix.MatrixMode
-- control-own.0.ESPMatrix.MatrixIntensity
+anschliessend müssen noch ein weiterer Datenpunkte in IOBroker angelegt werden. Diese muss notuendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
+- control-own.0.ESPMatrix.MatrixSetting
 
 ```diff
 -                !!!      ALLE DATENPUNKTE MÜSSEN ALS TEXTFELDER DEFININIERT SEIN     !!!
