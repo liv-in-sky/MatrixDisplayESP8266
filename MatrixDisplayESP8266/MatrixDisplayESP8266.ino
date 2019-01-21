@@ -340,7 +340,7 @@ void loop() {
     if (modusAlt != modus) shutty = false;
     modusAlt = modus;
     Serial.println( "Modus von IOBROKER ist : " + String(modus));
-    if (modus < 0 || modus > 8) {
+    if (modus < 0 || modus > 9) {
       modus = 99;
       Serial.println( "ERROR: Mode falsch : " + String(modus));
 
@@ -354,7 +354,7 @@ void loop() {
     Serial.println( "Abfrage Refresh Time : " + String(refreshSeconds));
 
     check = String(refreshSeconds).toInt() * 1000;
-    if (check < 1000 || check > 3600000) {
+    if (check < 1000 || check > 600000) {
       errorHandle = "30";
       errorHandle.toCharArray(refreshSeconds, 11);
       Serial.println( "ERROR: refreshTime : " + String(refreshSeconds));
@@ -416,6 +416,7 @@ void loop() {
       case 0:  {
 
              resetCount++;
+            // Serial.println(String(resetCount));
           if (resetCount >40000 ) {
             resetCount = 0;
              ESP.restart();
@@ -486,7 +487,7 @@ void loop() {
             }
             //memset(valueArray,0,sizeof(valueArray));
             P.displayReset();
-            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), 0, scrollEffectIn, scrollEffectIn);
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectIn);
             P.displayAnimate();
             
           }
@@ -544,7 +545,7 @@ void loop() {
             }
             //memset(valueArray,0,sizeof(valueArray));
             P.displayReset();
-            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), 0, scrollEffectIn, scrollEffectIn);
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectIn);
             //P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectIn);
             P.displayAnimate();
           }
@@ -593,7 +594,7 @@ void loop() {
 
 
             P.displayReset();
-            P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_PRINT, PA_PRINT);
             P.displayAnimate();
             delay(1250);
           }
