@@ -1,10 +1,12 @@
 # MatrixDisplayESP8266 fur IOBroker optimiert
 
+Ich benutze IOBroker - es kann aber jeder WebServer, der  "httpget" empfangen kann, genutzt werden.
 
 **folgende Änderungen zum Orginal:**
 ```diff
 + Einführung von Modi
 + Schalter optional (durch IOBroker ausführbar)
++ Standard(Config)-Werte (durch IOBroker ausführbar)
 + Sonderzeichen und Umlaute werden unterstützt 
 + kleine Fehlerbehandlung mit Anzeige - bei falschen Werten
 ```
@@ -12,12 +14,12 @@
 
 Folgende Modi sind vorhanden:
 
-- 1 - wie Orginal - Text (Daten) kommen von rechts und gehen nach oben - mit Uhrzeit
+- 1 - wie Orginal - Text (Daten) kommt von rechts und geht nach oben - mit Uhrzeit
 - 2 - nur Uhrzeit - feststehend
 - 3 - Daten laufen von rechts nach links durch - ohne Uhrzeit
 - 4 - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
 - 5 - Daten laufen von rechts nach links durch mit Uhrzeit
-- 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten)
+- 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten) (nur ein Wert)
 - 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
 - 8 - Daten kommen von oben - gehen wieder nach unten - mit Uhrzeit
 - 9 - display aus
@@ -26,19 +28,20 @@ WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den A
 
 ![Sampleum](/MatrixDisplayESP8266/images/Sampleum.png)
 
-Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit!
+Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit! Die Schaltersind optional.
 
-Auch die Satndardwerte, welche bei ersten Einrichten angegeben werden müssen, können übergeben werden (IOBroker). ScrollPause, ScrollSpeed und der wert, wie oft masn die Daten abholen will (Refresh Time).
+Auch die Standardwerte, welche beim ersten Einrichten angegeben werden müssen, können übergeben werden (von  z.B. IOBroker). ScrollPause, ScrollSpeed und der wert, wie oft man die Daten abholen will (Refresh Time).
 
-Die Standard(Config)-Werte werden wie die zu anzeigenden Daten übergeben. Z.B 5;1;60;5;29 . In der Reihenfolge bedeutend: <Mode>; <Intensity(Helligkeit)><;<RefreshTime>;<ScrollPause>;<ScrolSpeed>
+Die Daten werden wie im Orginal im folgenden Format übegeben:  xxx;yyy;zzz
+Die Standard(Config)-Werte werden wie die zu anzeigenden Daten übergeben. Z.B 5;1;60;5;20 . In der Reihenfolge bedeutend: <Mode>; <Intensity(Helligkeit)><;<RefreshTime>;<ScrollPause>;<ScrollSpeed>
 
 Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mit dem Standardport 8087.
 
-Die Einrichtung ist wie im Orginal - es kommen weitere Url-Abfragen dazu.
+Die Einrichtung ist wie im Orginal - es kommt eine weitere Url-Abfragen dazu.
 
 Url für Daten werden wie Orginal angelegt
 - http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix (IOBroker-Baum: control-own.0.ESPMatrix.Matrix)
-anschliessend müssen noch ein weiterer Datenpunkte in IOBroker angelegt werden. Diese muss notuendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
+anschliessend müssen noch ein weiterer Datenpunkte in IOBroker angelegt werden. Diese muss notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
 - control-own.0.ESPMatrix.MatrixSetting
 
 ```diff
