@@ -32,7 +32,7 @@ Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte e
 
 Auch die Standardwerte, welche beim ersten Einrichten angegeben werden müssen, können übergeben werden (von  z.B. IOBroker). ScrollPause, ScrollSpeed und der Wert, wie oft man die Daten abholen will (Refresh Time). ScrollSpeed:  0 bis 300; ScrollPause: 0 bis 30(sek); RefreshTime (erzeugt Taffic im Netz!): 1 bis 600 = 1 min bis 10 min).
 Die Daten werden wie im Orginal im folgenden Format übegeben:  xxx;yyy;zzz
-Die Standard(Config)-Werte werden wie die zu anzeigenden Daten übergeben. Z.B 5;1;60;5;20 . In der Reihenfolge bedeutend: <Mode>; <Intensity(Helligkeit)><;<RefreshTime>;<ScrollPause>;<ScrollSpeed>
+Die Standard(Config)-Werte werden wie die zu anzeigenden Daten übergeben. Z.B 5;1;60;5;20 . In der Reihenfolge bedeutend: Mode, Intensity(Helligkeit);RefreshTime;ScrollPause;ScrollSpeed
 
 Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mit dem Standardport 8087.
 
