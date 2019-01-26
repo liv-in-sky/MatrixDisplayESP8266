@@ -14,6 +14,7 @@
 #include "Parola_Fonts_data.h"
 
 
+
 char refreshSeconds[10] = "60";
 char scrollPause[10] = "5";
 char url[255] = "";
@@ -199,8 +200,8 @@ void setup() {
   //  P.addChar('-', line);
   //  P.addChar('_', block);
   //  P.addChar('§', heart);
-  P.displayText("start  ...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
-  P.displayAnimate();
+  //P.displayText("start  ...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
+ // P.displayAnimate();
 
   if (digitalRead(key1) == LOW || digitalRead(key2) == LOW) {
     startWifiManager = true;
@@ -661,7 +662,7 @@ void loop() {
   {
     digitalWrite(16, LOW);
     resetCount++;
-    if (resetCount >50000 ) {
+    if (resetCount >50 ) {
       resetCount = 0;
       ESP.restart();
     }
@@ -712,7 +713,7 @@ String loadDataFromURL() {
       payload = payload.substring(1, payload.length() - 1);
     }
     Serial.println("getState payload = " + payload);
-
+    
     return payload;
   } else
     Serial.println("RESTART URL");
