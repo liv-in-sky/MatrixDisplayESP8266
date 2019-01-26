@@ -14,6 +14,7 @@
 #include "Parola_Fonts_data.h"
 
 
+
 char refreshSeconds[10] = "60";
 char scrollPause[10] = "5";
 char url[255] = "";
@@ -64,6 +65,8 @@ int modeCnt = 0;
 byte timeSetTryCount = 0;
 String settingsArray[5];
 int settingsCount = 0;
+String settingString2;
+int valueCountBefore=0;
 
 //settingString ist variable für laufen: festehend ist aus - laufen ist ein
 String settingString = "\"nein\"";
@@ -199,8 +202,8 @@ void setup() {
   //  P.addChar('-', line);
   //  P.addChar('_', block);
   //  P.addChar('§', heart);
-  P.displayText("start  ...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
-  P.displayAnimate();
+  //P.displayText("start  ...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
+ // P.displayAnimate();
 
   if (digitalRead(key1) == LOW || digitalRead(key2) == LOW) {
     startWifiManager = true;
@@ -257,11 +260,13 @@ digitalWrite(16, HIGH);
 
 void loop() {
   ArduinoOTA.handle();
+ // delay (1000);
+ // Serial.println(ESP.getFreeHeap(),DEC);
   if (digitalRead(key1) == LOW ) {
     if (!key1last) {
       key1last = true;
       intensity = intensity + 2;
-      if (intensity > 14) intensity = 0;
+      if (intensity > 14) intensity = 1;
       P.setIntensity(intensity-1);
       Serial.println("Set intensity to " + String(intensity));
       if (!saveSysConfig()) {
@@ -300,31 +305,17 @@ void loop() {
 
   if (((millis() - lastMillis > String(refreshSeconds).toInt() * 1000) || lastMillis == 0 || udpMessage == "update") && String(url) != "") {
     Serial.println("Fetching data from URL...");
-    String valueString = "";
-    memset(valueArray, 0, sizeof(valueArray));
-    //memset(curMessage, 0, sizeof(curMessage));
 
-    valueString = loadDataFromURL();
-    char buf[valueString.length() + 1];
-    valueString.toCharArray(buf, sizeof(buf));
-    Serial.println("buf : " + String(buf));
-    char *p = buf;
-    char *str;
-    valueCount = 0;
-    while ((str = strtok_r(p, ";", &p)) != NULL) {
-      valueArray[valueCount] = str;
-      valueCount++;
-    }
-    memset(buf, 0, sizeof(buf));
- 
+// // memset(valueArray, 0, sizeof(valueArray));
 
-    // Serial.println("buf : " + String(buf));
-    Serial.println("valuecCount  : " + String(valueCount));
-    String rrr = configSettingFromURL();
-    Serial.println( "Setting bekommen : " + String(rrr));
-    char buf3[rrr.length() + 1];
-    rrr.toCharArray(buf3, sizeof(buf));
-    Serial.println("buf3 : " + String(buf));
+  // Serial.println(ESP.getFreeHeap(),DEC); 
+   
+    settingString2 = configSettingFromURL(); // "5;1;5;3;15";
+    if (settingString2 != "HTTP ERROR"){
+    Serial.println( "Setting bekommen : " + String(settingString2));
+    char buf3[settingString2.length() + 1];
+    settingString2.toCharArray(buf3, sizeof(buf3));
+    //Serial.println("buf3 : " + String(buf));
     char *q = buf3;
     char *str3;
     settingsCount = 0;
@@ -332,14 +323,18 @@ void loop() {
       settingsArray[settingsCount] = str3;
       settingsCount++;
     }
-       memset(buf3, 0, sizeof(buf3));
-    Serial.println("Array Setting platz1 : " + String(settingsArray[0]) + String(settingsArray[1]) + String(settingsArray[2]) + String(settingsArray[3]) + String(settingsArray[4]));
+ //   memset(buf3, 0, sizeof(buf3));
+    }
+       
+      
+  //  Serial.println("Array Setting platz1 : " + String(settingsArray[0]) + String(settingsArray[1]) + String(settingsArray[2]) + String(settingsArray[3]) + String(settingsArray[4]));
 
     modusLoad = settingsArray[0];
     modus = modusLoad.toInt();
     if (modusAlt != modus) shutty = false;
     modusAlt = modus;
     Serial.println( "Modus von IOBROKER ist : " + String(modus));
+    
     if (modus < 0 || modus > 9) {
       modus = 99;
       Serial.println( "ERROR: Mode falsch : " + String(modus));
@@ -400,19 +395,55 @@ void loop() {
       errorMessage = "! ERROR ! bad Intesity";
       modus = 99;
     }
+    if (settingString2 == "HTTP ERROR"){
+       errorMessage = "! ERROR ! HTTP CON";
+      modus = 99;
+    }
     P.setIntensity(intensity - 1);
 
+ //----RESET ARRAY sonst falsche Daten-------memset - sram leak!-------------------------------------     
+  
+        for( int i = 0; i < valueCount;  ++i ) valueArray[i] = "";
+   
+   // memset(valueArray, 0, sizeof(valueArray));
+    
+
+    String valueString = loadDataFromURL(); //"123;123;456";
+    char buf[valueString.length() + 1];
+    valueString.toCharArray(buf, sizeof(buf));
+    Serial.println("buf : " + String(buf) + "  valueString :  " + valueString  );
+    char *p = buf;
+    char *str;
+    valueCount = 0;
+    while ((str = strtok_r(p, ";", &p)) != NULL) {
+      valueArray[valueCount] = str;
+      valueCount++;
+    }
+    
+   
+     Serial.println();
+     Serial.println("valuecCount  : " + String(valueCount));
+     Serial.println("buf : " + String(buf) + "  valueString :  " + valueString + "  valueCountBefore :  " + String(valueCountBefore) );
+     Serial.println();
+
+   
 
     lastMillis = millis();
 
   }
+
+    if (valueCount != valueCountBefore){
+          valueCountBefore=valueCount;
+          loopCount=-1;
+         Serial.println("---------------------------------------");
+    }
 
   if (modus != 7) loopCountBlink = 0;
   if (!shutty) P.displayShutdown(false);
   if (modus != 99) {
     digitalWrite(16, HIGH);
     switch (modus) {
-
+// Serial.println( ESP.getFreeHeap(),DEC);
       case 0:  {
 
              resetCount++;
@@ -448,7 +479,7 @@ void loop() {
 
 
             }
-            //memset(valueArray,0,sizeof(valueArray));
+            // //memset(valueArray,0,sizeof(valueArray));
             P.displayReset();
             P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectUp);
             // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
@@ -467,7 +498,7 @@ void loop() {
           P.displayAnimate();
           break;
         }
-
+      
       case 3:  {
           resetCount = 0;
           if (P.displayAnimate())
@@ -485,7 +516,7 @@ void loop() {
 
 
             }
-            //memset(valueArray,0,sizeof(valueArray));
+            // //memset(valueArray,0,sizeof(valueArray));
             P.displayReset();
             P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectIn);
             P.displayAnimate();
@@ -516,7 +547,7 @@ void loop() {
               utf8Ascii(curMessage);
 
             }
-            //memset(valueArray,0,sizeof(valueArray));
+           // //memset(valueArray,0,sizeof(valueArray));
             P.displayReset();
             P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectRight);
             P.displayAnimate();
@@ -543,7 +574,7 @@ void loop() {
 
 
             }
-            //memset(valueArray,0,sizeof(valueArray));
+          //  //memset(valueArray,0,sizeof(valueArray));
             P.displayReset();
             P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectIn);
             //P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectIn);
@@ -596,7 +627,7 @@ void loop() {
             P.displayReset();
             P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_PRINT, PA_PRINT);
             P.displayAnimate();
-            delay(1250);
+            //delay(1250);
           }
 
 
@@ -641,7 +672,7 @@ void loop() {
 
       default: {
 
-          memset(curMessage, 0, sizeof(curMessage));
+         // memset(curMessage, 0, sizeof(curMessage));
           
         }
     }
@@ -651,14 +682,14 @@ void loop() {
   {
     digitalWrite(16, LOW);
     resetCount++;
-    if (resetCount >50000 ) {
+    if (resetCount >50 ) {
       resetCount = 0;
       ESP.restart();
     }
     //  Serial.println(String(resetCount));
     // Serial.println("FEHLERBEHANDLUNG");
     if (P.displayAnimate()) {
-      memset(curMessage, 0, sizeof(curMessage));
+    //  memset(curMessage, 0, sizeof(curMessage));
       // errorMessage="! ERROR ! " + errorMessage;
       errorMessage.toCharArray(curMessage, errorMessage.length() + 1);
       utf8Ascii(curMessage);
@@ -677,10 +708,11 @@ void loop() {
 
 String loadDataFromURL() {
   if (WiFi.status() == WL_CONNECTED) {
+    
     HTTPClient http;
     http.setTimeout(3000);
     Serial.println("getState url: " + String(url));
- 
+ //http.setReuse(true);
     http.begin(url);
     int httpCode = http.GET();
    String payload = "error";
@@ -688,8 +720,8 @@ String loadDataFromURL() {
       payload = http.getString();
     }
     if (httpCode != 200) {
-      Serial.println("HTTP " + String(url) + " fail");
-      payload = " HTTP ERROR ";
+      Serial.println("HTTP " + String(url) + String(httpCode) + " fail");
+      payload = "HTTP ERROR";
     }
 
      http.end();
@@ -702,7 +734,8 @@ String loadDataFromURL() {
       payload = payload.substring(1, payload.length() - 1);
     }
     Serial.println("getState payload = " + payload);
-
+   Serial.println(ESP.getFreeHeap(),DEC);
+   Serial.println(String(sizeof(valueArray)));
     return payload;
   } else
     Serial.println("RESTART URL");
@@ -715,7 +748,7 @@ String configSettingFromURL() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.setTimeout(3000);
-
+//http.setReuse(true);
     String url1 = url;
     http.begin(url1+ "Setting");
 
@@ -725,8 +758,8 @@ String configSettingFromURL() {
       payload = http.getString();
     }
     if (httpCode != 200) {
-      Serial.println("Setting " + String(url1) + " fail");
-      payload = " HTTP ERROR ";
+      Serial.println("Setting " + String(url1) + String(httpCode) + " fail");
+      payload = "HTTP ERROR";
     }
     http.end();
 
@@ -790,7 +823,7 @@ int loadIntensityFromURL() {
     }
     if (httpCode != 200) {
       Serial.println("Matrix Setting " + String(url) + " fail");
-      payload = " HTTP ERROR ";
+      payload = " HTTP ERROR matrix ";
     }
     http.end();
 
