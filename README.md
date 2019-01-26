@@ -8,7 +8,6 @@ Ich benutze IOBroker - es kann aber jeder WebServer, der  "httpget" empfangen ka
 + Schalter optional (durch IOBroker ausführbar)
 + Standard(Config)-Werte (durch IOBroker ausführbar)
 + Sonderzeichen und Umlaute werden unterstützt 
-+ kleine Fehlerbehandlung mit Anzeige - bei falschen Werten
 ```
 
 
