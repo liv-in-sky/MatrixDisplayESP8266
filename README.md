@@ -43,9 +43,9 @@ Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mi
 Die Einrichtung ist wie im Orginal - es kommt eine weitere Url-Abfragen dazu.
 
 Url für Daten werden wie Orginal angelegt
-- http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix (IOBroker-Baum: control-own.0.ESPMatrix.Matrix)
+- http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix (IOBroker-Baum: control-own.0.ESPMatrix.**Matrix**)
 anschliessend müssen noch ein weiterer Datenpunkte in IOBroker angelegt werden. Diese muss notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
-- control-own.0.ESPMatrix.MatrixSetting
+- control-own.0.ESPMatrix.**Matrix**Setting
 
 ```diff
 -                !!!      ALLE DATENPUNKTE MÜSSEN ALS TEXTFELDER DEFININIERT SEIN     !!!
