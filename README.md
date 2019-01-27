@@ -50,7 +50,7 @@ anschliessend müssen noch ein weiterer Datenpunkt in IOBroker angelegt werden. 
 Im Config-Mode des Wemos D1 wird nur eine URL angegeben (DatenURL). Bei richtiger Bennenung des zweiten Datenpunktes, wird er automatisch gefunden ! 
 
 ```diff
--                !!!      ALLE DATENPUNKTE MÜSSEN ALS TEXTFELDER DEFININIERT SEIN     !!!
+-                !!!      ALLE DATENPUNKTE IM IOBROKER MÜSSEN ALS TEXTFELDER DEFININIERT SEIN     !!!
 ```
 Eine weitere Hilfe für den Bau ist auf folgender Seite zu finden:
 
