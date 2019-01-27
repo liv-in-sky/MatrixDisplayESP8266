@@ -46,6 +46,7 @@ Url für Daten werden wie Orginal angelegt
 - http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix (IOBroker-Baum: control-own.0.ESPMatrix.**Matrix**)
 anschliessend müssen noch ein weiterer Datenpunkt in IOBroker angelegt werden. Diese muss notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
 - control-own.0.ESPMatrix.**MatrixSetting**
+
 Im Config-Mode des Wemos D1 wird nur eine URL angegeben (DatenURL). Bei richtiger Bennenung des zweiten Datenpunktes, wird er automatisch gefunden ! 
 
 ```diff
