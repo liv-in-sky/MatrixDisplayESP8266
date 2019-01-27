@@ -30,7 +30,7 @@ Datumsanzeige: Ob es eine Datumsanzeige gibt, wird durch die Anzahl der verbaute
 
 WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den Arduino-Sketch-libraries-Ordner entpackt werden damit alles richtig kompiliert werden kann (u.U. müssen noch weitere Bibliotheken geladen werden))
 
-![Sampleum](/MatrixDisplayESP8266/images/uml-ani-gif9.gif)
+![Sampleum](/MatrixDisplayESP8266/images/uml-ani-gif10.gif)
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit! Die Schalter sind optional.Die Modi sind von 1 bis 9. Intensity (Helligkeit) geht von 1 bis 10.
 
