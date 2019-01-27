@@ -67,6 +67,9 @@ String settingsArray[5];
 int settingsCount = 0;
 String settingString2;
 int valueCountBefore=0;
+int errorCode = 0;
+String datum;
+int datumJa=1;
 
 //settingString ist variable für laufen: festehend ist aus - laufen ist ein
 String settingString = "\"nein\"";
@@ -202,8 +205,13 @@ void setup() {
   //  P.addChar('-', line);
   //  P.addChar('_', block);
   //  P.addChar('§', heart);
-  //P.displayText("start  ...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
- // P.displayAnimate();
+    P.displayText("here we go ...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
+   P.displayAnimate();
+//  String startMessage = "here we go";
+//  startMessage.toCharArray(curMessage, 16);
+//    utf8Ascii(curMessage);
+// P.displayText(curMessage, PA_LEFT, 15, 1500, scrollEffectIn, scrollEffectUp);//PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
+// P.displayAnimate();
 
   if (digitalRead(key1) == LOW || digitalRead(key2) == LOW) {
     startWifiManager = true;
@@ -240,13 +248,14 @@ void setup() {
         ESP.restart();
       }
     }
-    Serial.println(String(ip));
+    
+    Serial.println(WiFi.localIP().toString());
 
-    String(ip).toCharArray(curMessage, errorMessage.length() + 1);
+    WiFi.localIP().toString().toCharArray(curMessage, 16);
     utf8Ascii(curMessage);
-    //  P.displayText(curMessage, PA_LEFT, 25, 0, scrollEffectIn, scrollEffectUp);
-    // P.displayAnimate();
-    // delay(3000);
+      P.displayText(curMessage, PA_LEFT, 15, 0, scrollEffectIn, scrollEffectUp);
+     P.displayAnimate();
+     //delay(3000);
     startOTAhandling();
   }
   else ESP.restart();
@@ -254,6 +263,10 @@ void setup() {
 delay(1500);
 digitalWrite(16, HIGH);
 
+if (MAX_DEVICES<=8) { datumJa=0;}
+               else if (MAX_DEVICES>8 && MAX_DEVICES<16) {datum=calcDate(); datumJa=1;}
+               else {datum=calcDate(); datumJa=2;}
+//Serial.println(datum + String(datumJa));
 }
 
 
@@ -304,12 +317,10 @@ void loop() {
 
 
   if (((millis() - lastMillis > String(refreshSeconds).toInt() * 1000) || lastMillis == 0 || udpMessage == "update") && String(url) != "") {
-    Serial.println("Fetching data from URL...");
+    
+    Serial.println("------------------Fetching data from URL...------------------------------------");
+    
 
-// // memset(valueArray, 0, sizeof(valueArray));
-
-  // Serial.println(ESP.getFreeHeap(),DEC); 
-   
     settingString2 = configSettingFromURL(); // "5;1;5;3;15";
     if (settingString2 != "HTTP ERROR"){
     Serial.println( "Setting bekommen : " + String(settingString2));
@@ -323,7 +334,9 @@ void loop() {
       settingsArray[settingsCount] = str3;
       settingsCount++;
     }
- //   memset(buf3, 0, sizeof(buf3));
+    } else {
+      errorCode = 6;
+      modus = 99;
     }
        
       
@@ -338,8 +351,8 @@ void loop() {
     if (modus < 0 || modus > 9) {
       modus = 99;
       Serial.println( "ERROR: Mode falsch : " + String(modus));
-
-      errorMessage = "! ERROR ! bad Mode";
+       errorCode = errorCode <6 ? 5 : 6;
+     //  errorCode = 5;
     }
 
 
@@ -354,7 +367,8 @@ void loop() {
       errorHandle.toCharArray(refreshSeconds, 11);
       Serial.println( "ERROR: refreshTime : " + String(refreshSeconds));
       //  fehlerHandling(errorMessage, "RefreshTime");
-      errorMessage = "! ERROR ! bad RefreshTime";
+       errorCode = errorCode <6 ? 4 : 6;
+     //  errorCode = 4;
       modus = 99;
     }
 
@@ -363,12 +377,12 @@ void loop() {
     Serial.println( "Abfrage ScrollPause : " + String(scrollPause));
 
     check = String(scrollPause).toInt() * 1000;
-    if (check < 0 || check > 30000) {
+    if (check < 1 || check > 30000) {
       errorHandle = "5";
       errorHandle.toCharArray(scrollPause, 11);
       Serial.println( "ERROR: Abfrage ScrollPause : " + String(scrollPause));
 
-      errorMessage = "! ERROR ! bad ScrollPause";
+       errorCode = errorCode <6 ? 3 : 6;
       modus = 99;
     }
 
@@ -382,7 +396,7 @@ void loop() {
       errorHandle.toCharArray(scrollSpeed, 11);
       Serial.println( "ERROR: Abfrage ScrollSpeed : " + String(scrollSpeed));
 
-      errorMessage = "! ERROR ! bad ScrollSpeed";
+       errorCode = errorCode <6 ? 2 : 6;
       modus = 99;
     }
 
@@ -391,27 +405,23 @@ void loop() {
     Serial.println( "Intensity von IOBROKER ist : " + String(intensity));
     if (intensity < 1 || intensity > 11) {
       intensity = 1;
-      Serial.println( "ERROR: Intensity falsch : " + String(intensity));
-      errorMessage = "! ERROR ! bad Intesity";
+      Serial.println( "ERROR: Intensity falsch : " + String(intensity + String(errorCode)));
+             errorCode = errorCode<6 ? 1 : 6;
+             Serial.println( "ERROR: Intensity falsch : " + String(intensity + String(errorCode)));
       modus = 99;
     }
-    if (settingString2 == "HTTP ERROR"){
-       errorMessage = "! ERROR ! HTTP CON";
-      modus = 99;
-    }
+   
     P.setIntensity(intensity - 1);
 
  //----RESET ARRAY sonst falsche Daten-------memset - sram leak!-------------------------------------     
   
         for( int i = 0; i < valueCount;  ++i ) valueArray[i] = "";
-   
-   // memset(valueArray, 0, sizeof(valueArray));
-    
+ //--------------------------------------------------------------------------------------------------   
 
     String valueString = loadDataFromURL(); //"123;123;456";
     char buf[valueString.length() + 1];
     valueString.toCharArray(buf, sizeof(buf));
-    Serial.println("buf : " + String(buf) + "  valueString :  " + valueString  );
+  //  Serial.println("buf : " + String(buf) + "  valueString :  " + valueString  );
     char *p = buf;
     char *str;
     valueCount = 0;
@@ -420,14 +430,6 @@ void loop() {
       valueCount++;
     }
     
-   
-     Serial.println();
-     Serial.println("valuecCount  : " + String(valueCount));
-     Serial.println("buf : " + String(buf) + "  valueString :  " + valueString + "  valueCountBefore :  " + String(valueCountBefore) );
-     Serial.println();
-
-   
-
     lastMillis = millis();
 
   }
@@ -435,7 +437,7 @@ void loop() {
     if (valueCount != valueCountBefore){
           valueCountBefore=valueCount;
           loopCount=-1;
-         Serial.println("---------------------------------------");
+         
     }
 
   if (modus != 7) loopCountBlink = 0;
@@ -470,7 +472,14 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-              Zeit.toCharArray(curMessage, 10);
+              if (Zeit == "00 : 00") datum=calcDate();
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
               loopCount = -1;
             } else {
               String currentValue = valueArray[loopCount];
@@ -492,7 +501,16 @@ void loop() {
       case 2:  {
           resetCount = 0;
           String Zeit = calcTime(now());
-          Zeit.toCharArray(curMessage, 10);
+          if (Zeit == "00 : 00") datum=calcDate();
+
+          switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+          
+//           if (MAX_DEVICES>12) 
+//              {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);
+//            } else {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);}
           //     P.displayReset();
           P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
           P.displayAnimate();
@@ -539,7 +557,11 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-              Zeit.toCharArray(curMessage, 10);
+              if (Zeit == "00 : 00") datum=calcDate();
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
               loopCount = -1;
             } else {
               String currentValue = valueArray[loopCount];
@@ -565,7 +587,11 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-              Zeit.toCharArray(curMessage, 10);
+              if (Zeit == "00 : 00") datum=calcDate();
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
               loopCount = -1;
             } else {
               String currentValue = valueArray[loopCount];
@@ -644,7 +670,12 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-              Zeit.toCharArray(curMessage, 10);
+             // Serial.println(Zeit);delay(500);
+              if (Zeit == "00 : 00") datum=calcDate();
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
               loopCount = -1;
             } else {
               String currentValue = valueArray[loopCount];
@@ -652,9 +683,8 @@ void loop() {
               utf8Ascii(curMessage);
 
             }
-            //memset(valueArray,0,sizeof(valueArray));
-            P.displayReset();
-            P.displayText(curMessage, scrollAlign, 170, 3000, scrollEffectDown, scrollEffectDown);
+            //P.displayReset();
+            P.displayText(curMessage, scrollAlign, 150, 3000, scrollEffectDown, scrollEffectDown);
             P.displayAnimate();
           }
 
@@ -671,10 +701,7 @@ void loop() {
         }
 
       default: {
-
-         // memset(curMessage, 0, sizeof(curMessage));
-          
-        }
+               }
     }
       
 
@@ -682,15 +709,26 @@ void loop() {
   {
     digitalWrite(16, LOW);
     resetCount++;
-    if (resetCount >50 ) {
+    if (resetCount >50000 ) {
       resetCount = 0;
       ESP.restart();
     }
-    //  Serial.println(String(resetCount));
-    // Serial.println("FEHLERBEHANDLUNG");
-    if (P.displayAnimate()) {
-    //  memset(curMessage, 0, sizeof(curMessage));
-      // errorMessage="! ERROR ! " + errorMessage;
+   
+     // Serial.println("errorCode:  " + String(errorCode) + "modus: " + String(modus));
+   
+     switch (errorCode) {
+          case 0: { errorMessage="! ERROR ! REF TIME" ;break; }
+          case 1: { errorMessage="! ERROR ! BAD INTENSTITY" ;break; }
+          case 2: { errorMessage="! ERROR ! SCR SPEED" ;break; }
+          case 3: { errorMessage="! ERROR ! SCR PAUSE" ;break; }
+          case 4: { errorMessage="! ERROR ! REF TIME" ;break; }
+          case 5: { errorMessage="! ERROR ! BAD MODE" ;break; }
+          case 6: { errorMessage="! ERROR ! HTTP CON" ;break; }
+         
+         }
+        //  errorCode=0;
+      if (P.displayAnimate()) {
+      Serial.println(errorMessage);
       errorMessage.toCharArray(curMessage, errorMessage.length() + 1);
       utf8Ascii(curMessage);
       //  Serial.println(String(curMessage) + errorMessage + String(errorMessage.length() +1));
@@ -734,8 +772,8 @@ String loadDataFromURL() {
       payload = payload.substring(1, payload.length() - 1);
     }
     Serial.println("getState payload = " + payload);
-   Serial.println(ESP.getFreeHeap(),DEC);
-   Serial.println(String(sizeof(valueArray)));
+ //  Serial.println(ESP.getFreeHeap(),DEC);
+  // Serial.println(String(sizeof(valueArray)));
     return payload;
   } else
     Serial.println("RESTART URL");
