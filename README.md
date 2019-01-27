@@ -8,6 +8,7 @@ Ich benutze IOBroker - es kann aber jeder WebServer, der  "httpget" empfangen ka
 + Schalter optional (durch IOBroker ausführbar)
 + Standard(Config)-Werte (durch IOBroker ausführbar)
 + Sonderzeichen und Umlaute werden unterstützt 
++ Fehleranzeige bei falschen Setting-Daten
 ```
 
 
@@ -21,7 +22,9 @@ Folgende Modi sind vorhanden:
 - 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten) (nur ein Wert)
 - 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
 - 8 - Daten kommen von oben - gehen wieder nach unten - mit Uhrzeit
-- 9 - display aus
+- 9 - Display aus
+
+Datumsanzeige: Ob es eine Datumsanzeige gibt, wird durch die Anzahl der verbauten Matrix-Module besimmt. Bei 2 * 4 Modulen (MAX_DEVICES=8) wird das Datum übersprungen. Erst ab 3 * 4 Modulen (MAX_DEVICES=12) wird auch das Datum neben der Uhrzeit angezeigt. Der MAX_DEVICES - Wert muss VOR der Programmierung des Wemos in das Arduino-Sketch-File (MatrixDisplayESP8266.ino) eingegeben werden.
 
 WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den Arduino-Sketch-libraries-Ordner entpackt werden damit alles richtig kompiliert werden kann (u.U. müssen noch weitere Bibliotheken geladen werden))
 
