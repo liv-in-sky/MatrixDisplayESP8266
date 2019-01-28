@@ -85,6 +85,7 @@ String errorHandle;
 String errorMessage = "! ERROR !";
 String errorMessage2;
 int check;
+bool ntpSave = false;
 
 //WifiManager - don't touch
 #define IPSIZE              16
@@ -345,7 +346,7 @@ void loop() {
 
     modusLoad = settingsArray[0];
     modus = modusLoad.toInt();
-    if (modusAlt != modus) shutty = false;
+    if (modusAlt != modus) {shutty = false; ntpSave = true;}   //für Datumabfrage und display shutdown
     modusAlt = modus;
     Serial.println( "Modus von IOBROKER ist : " + String(modus));
     
@@ -473,7 +474,7 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
            } else { zeitHelp=false;}
              
             switch (datumJa) {
@@ -503,7 +504,7 @@ void loop() {
       case 2:  {
           resetCount = 0;
           String Zeit = calcTime(now());
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
            } else { zeitHelp=false;}
 
           switch (datumJa) {
@@ -522,9 +523,7 @@ void loop() {
           resetCount = 0;
           if (P.displayAnimate())
           {
-          String Zeit = calcTime(now());
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+ 
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
             //  String Zeit = calcTime(now());
@@ -560,7 +559,7 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
            } else { zeitHelp=false;}
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -591,7 +590,7 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
            } else { zeitHelp=false;}
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -617,10 +616,7 @@ void loop() {
       //STEHEND EIN WERT
       case 6:  {
           resetCount = 0;
-          String Zeit = calcTime(now());
-          
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+
   
           String currentValue = valueArray[0];
           currentValue.toCharArray(curMessage, currentValue.length() + 1);
@@ -641,9 +637,7 @@ void loop() {
 
           if (P.displayAnimate())
           {
-          String Zeit = calcTime(now());
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+
            
             if (valueCount > 1) {
               loopCountBlink++;
@@ -683,8 +677,8 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-             // Serial.println(Zeit);delay(500);
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+              
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
            } else { zeitHelp=false;}
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -708,9 +702,7 @@ void loop() {
 
       case 9: {
           resetCount = 0;
-          String Zeit = calcTime(now());
-         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}    
+         
           P.displayReset();
           P.displayShutdown(true);
           shutty = true;
