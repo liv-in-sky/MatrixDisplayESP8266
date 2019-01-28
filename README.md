@@ -10,7 +10,7 @@ Ich benutze IOBroker - es kann aber jeder WebServer, der  "httpget" empfangen ka
 + Sonderzeichen und Umlaute werden unterstützt 
 + Fehleranzeige bei falschen Setting-Daten
 ```
-
+Kurzes Video mit Vorführung: https://youtu.be/VW0sVTzDxuE
 
 Folgende Modi sind vorhanden:
 
