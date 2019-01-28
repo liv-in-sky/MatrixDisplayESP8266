@@ -70,6 +70,7 @@ int valueCountBefore=0;
 int errorCode = 0;
 String datum;
 int datumJa=1;
+bool zeitHelp=false;
 
 //settingString ist variable für laufen: festehend ist aus - laufen ist ein
 String settingString = "\"nein\"";
@@ -264,8 +265,8 @@ delay(1500);
 digitalWrite(16, HIGH);
 
 if (MAX_DEVICES<=8) { datumJa=0;}
-               else if (MAX_DEVICES>8 && MAX_DEVICES<16) {datum=calcDate(); datumJa=1;}
-               else {datum=calcDate(); datumJa=2;}
+               else if (MAX_DEVICES>8 && MAX_DEVICES<16) {datum=calcDate(now()); datumJa=1;}
+               else {datum=calcDate(now()); datumJa=2;}
 //Serial.println(datum + String(datumJa));
 }
 
@@ -472,7 +473,8 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-              if (Zeit == "00 : 00") datum=calcDate();
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
              
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -501,16 +503,15 @@ void loop() {
       case 2:  {
           resetCount = 0;
           String Zeit = calcTime(now());
-          if (Zeit == "00 : 00") datum=calcDate();
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
 
           switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
                            case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
           
-//           if (MAX_DEVICES>12) 
-//              {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);
-//            } else {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);}
+
           //     P.displayReset();
           P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
           P.displayAnimate();
@@ -521,7 +522,9 @@ void loop() {
           resetCount = 0;
           if (P.displayAnimate())
           {
-
+          String Zeit = calcTime(now());
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
             //  String Zeit = calcTime(now());
@@ -557,7 +560,8 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-              if (Zeit == "00 : 00") datum=calcDate();
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
@@ -587,7 +591,8 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-              if (Zeit == "00 : 00") datum=calcDate();
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
@@ -612,6 +617,11 @@ void loop() {
       //STEHEND EIN WERT
       case 6:  {
           resetCount = 0;
+          String Zeit = calcTime(now());
+          
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
+  
           String currentValue = valueArray[0];
           currentValue.toCharArray(curMessage, currentValue.length() + 1);
           utf8Ascii(curMessage);
@@ -631,7 +641,10 @@ void loop() {
 
           if (P.displayAnimate())
           {
-
+          String Zeit = calcTime(now());
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
+           
             if (valueCount > 1) {
               loopCountBlink++;
               delay(1050);
@@ -671,7 +684,8 @@ void loop() {
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
              // Serial.println(Zeit);delay(500);
-              if (Zeit == "00 : 00") datum=calcDate();
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
@@ -694,6 +708,9 @@ void loop() {
 
       case 9: {
           resetCount = 0;
+          String Zeit = calcTime(now());
+         if (Zeit == "00 : 00") { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}    
           P.displayReset();
           P.displayShutdown(true);
           shutty = true;

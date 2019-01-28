@@ -35,16 +35,20 @@ unsigned long sendNTPpacket(IPAddress& address) {
   NTPudp.endPacket();
 }
 
-String calcDate() {
+String calcDate(time_t t) {
          String datum;
       int tag = day();
+      if (!summertime(t, 0) && hour() == 0) tag = tag +1;
       if (tag < 10) {
-          datum = "0" + String(tag) +". ";
+          datum = "0" + String(tag) +" ";
       } else {
-          datum = String(tag) +". ";
+          datum = String(tag) +" ";
       }
-      datum = datum + String(monthStr(month())).substring(0, 3);
+      datum = String(monthStr(month())).substring(0, 3) + "  " + datum ;
+            datum.toUpperCase();
      return  datum ;
+
+
       
 //       Serial.println(hourFormat12());
 //    Serial.println(dayStr(weekday()));
