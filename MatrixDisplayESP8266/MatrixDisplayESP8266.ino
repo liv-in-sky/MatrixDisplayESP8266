@@ -300,7 +300,7 @@ void loop() {
   if (digitalRead(key2) == LOW) {
     delay(700);
     modus++;
-    if (modus > 9) modus = 1;
+    if (modus > 12) modus = 1;
     String yyy = (String)modus;
     yyy = "Mode: " + yyy;
     Serial.println(yyy);
