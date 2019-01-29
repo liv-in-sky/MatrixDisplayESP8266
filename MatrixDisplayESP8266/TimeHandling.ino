@@ -38,7 +38,8 @@ unsigned long sendNTPpacket(IPAddress& address) {
 String calcDate(time_t t) {
          String datum;
       int tag = day();
-      if (!summertime(t, 0) && hour() == 0) tag = tag +1;
+      Serial.println("TIME: " + String(tag) + String(tag+1) + String(hour())+ "   " + String(summertime(t, 0)));
+      if (!summertime(t, 0) && hour() == 23 && isPM()) tag = tag +1;
       if (tag < 10) {
           datum = "0" + String(tag) +" ";
       } else {
