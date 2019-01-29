@@ -321,7 +321,9 @@ void loop() {
   if (((millis() - lastMillis > String(refreshSeconds).toInt() * 1000) || lastMillis == 0 || udpMessage == "update") && String(url) != "") {
     
     Serial.println("------------------Fetching data from URL...------------------------------------");
-    
+
+
+  //  setModeToURL(1);
 
     settingString2 = configSettingFromURL(); // "5;1;5;3;15";
     if (settingString2 != "HTTP ERROR"){
@@ -350,7 +352,7 @@ void loop() {
     modusAlt = modus;
     Serial.println( "Modus von IOBROKER ist : " + String(modus));
     
-    if (modus < 0 || modus > 9) {
+    if (modus < 0 || modus > 12) {
       modus = 99;
       Serial.println( "ERROR: Mode falsch : " + String(modus));
        errorCode = errorCode <6 ? 5 : 6;
@@ -442,7 +444,11 @@ void loop() {
          
     }
 
-  if (modus != 7) loopCountBlink = 0;
+//Speziell für Mode 7 und 10
+if (ntpSave) {
+  if (modus != 7 ) loopCountBlink = 0;
+  if (modus != 10 ) loopCountBlink = 0;}
+  
   if (!shutty) P.displayShutdown(false);
   if (modus != 99) {
     digitalWrite(16, HIGH);
@@ -493,7 +499,7 @@ void loop() {
             }
             // //memset(valueArray,0,sizeof(valueArray));
             P.displayReset();
-            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectUp);
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, scrollEffectIn, scrollEffectUp);//);PA_SCROLL_DOWN_LEFT, PA_SCROLL_DOWN_LEFT
             // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
             P.displayAnimate();
           }
@@ -504,8 +510,8 @@ void loop() {
       case 2:  {
           resetCount = 0;
           String Zeit = calcTime(now());
-         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;Serial.println("Tag holen : " +datum);}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}  //Serial.println("zeithelp im case : " +String(zeitHelp));
 
           switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -521,6 +527,7 @@ void loop() {
       
       case 3:  {
           resetCount = 0;
+          ntpSave=0;
           if (P.displayAnimate())
           {
  
@@ -590,8 +597,8 @@ void loop() {
             loopCount++;
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
-           if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;Serial.println("Tag holen : " +datum);}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;Serial.println("zeithelp im case : " +String(zeitHelp));}
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
@@ -615,6 +622,7 @@ void loop() {
         }
       //STEHEND EIN WERT
       case 6:  {
+          ntpSave=0;
           resetCount = 0;
 
   
@@ -634,19 +642,23 @@ void loop() {
       //BLINKEND EIN ODER MEHR WERTE
       case 7:  {
           resetCount = 0;
+          ntpSave=0;
 
           if (P.displayAnimate())
           {
 
-           
+          // Serial.println(String(loopCountBlink) + "   " +  String(valueCount));
             if (valueCount > 1) {
               loopCountBlink++;
+              
               delay(1050);
               String currentValue = valueArray[loopCountBlink - 1];
+            //  Serial.println(String(loopCountBlink) + "   " + String(valueCount) + "   " + valueArray[loopCountBlink - 1]);
               currentValue.toCharArray(curMessage, currentValue.length() + 1);
               utf8Ascii(curMessage);
               if (loopCountBlink == valueCount) loopCountBlink = 0;
-
+  
+        //   Serial.println(String(loopCountBlink) + "   " +  String(valueCount));
             } else {
 
               delay(1050);
@@ -701,6 +713,7 @@ void loop() {
         }
 
       case 9: {
+        ntpSave=0;
           resetCount = 0;
          
           P.displayReset();
@@ -708,6 +721,113 @@ void loop() {
           shutty = true;
           break;
         }
+        
+        //BLINKEND EIN ODER MEHR WERTE
+  case 10:  {
+          resetCount = 0;
+          ntpSave=0;
+
+          if (P.displayAnimate())
+          {
+
+           
+            if (valueCount > 1) {
+              loopCountBlink++;
+              delay(1050);
+              String currentValue = valueArray[loopCountBlink - 1];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+              if (loopCountBlink == valueCount) loopCountBlink = 0;
+
+            } else {
+
+              delay(1050);
+              String currentValue = valueArray[0];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+            }
+
+
+
+            P.displayReset();
+            P.displayText(curMessage, PA_CENTER, 70, String(scrollPause).toInt() * 1000, PA_GROW_UP, PA_GROW_UP);
+            P.displayAnimate();
+            //delay(1250);
+          }
+
+
+          break;
+        }
+
+      case 11:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, 80, String(scrollPause).toInt() * 1000, PA_SCROLL_DOWN_RIGHT, PA_GROW_UP);
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+
+          break;
+        }    
+
+      case 12:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } else { zeitHelp=false;}
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, 80, String(scrollPause).toInt() * 1000, PA_SCROLL_UP_RIGHT, PA_SCROLL_DOWN_RIGHT);//PA_GROW_UP
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+
+          break;
+        }  
 
       default: {
                }
@@ -754,6 +874,9 @@ void loop() {
 //--------------------------------------------------------------------------------------------------------------------
 
 String loadDataFromURL() {
+
+  Serial.println("ntpSave :" + String(ntpSave) + "   zeitHelp :  " + String(zeitHelp));
+  
   if (WiFi.status() == WL_CONNECTED) {
     
     HTTPClient http;
@@ -855,35 +978,7 @@ int loadModeFromURL() {
 //--------------------------------------------------------------------------------------------------------------------
 
 
-int loadIntensityFromURL() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.setTimeout(3000);
 
-    String url1 = url;
-    http.begin(url1 + "Intensity");
-
-    int httpCode = http.GET();
-    String payload = "error";
-    if (httpCode > 0) {
-      payload = http.getString();
-    }
-    if (httpCode != 200) {
-      Serial.println("Matrix Setting " + String(url) + " fail");
-      payload = " HTTP ERROR matrix ";
-    }
-    http.end();
-
-
-    Serial.println("getState matrix Intensity = " + payload);
-    payload.replace("\"", "");
-
-    int xxx = payload.toInt();
-    //   if (xxx < 0 || xxx > 14) xxx=0;
-    return xxx;
-  } else Serial.println("RESTART INTENSITY");
-  ESP.restart();
-}
 //--------------------------------------------------------------------------------------------------------------------
 String configRefreshFromURL() {
   if (WiFi.status() == WL_CONNECTED) {
@@ -926,34 +1021,27 @@ void setModeToURL(String modeOut) {
     url1 = url1 + "Mode?value=";
     url1.replace("getPlainValue", "set");
     url1 = url1 + (String)modeOut;
-    //url1=url1 + "&prettyPrint";
-    //http.begin(url1+ "");
+ 
     Serial.println(url1);
     HTTPClient http;
     http.setTimeout(3000);
-    //  delay (500);
-
-    //  http.begin(url1);
-    http.begin("http://192.168.178.59:8087/set/controll-own.0.MatrixMode?value=1");
-
-    delay(5000);
+   
+    http.begin("http://192.168.178.59:8087/set/controll-own.0.MATRIX.AlarmModeMatrix?value=1");
     int httpCode = http.GET();
-
-    Serial.println(httpCode);
-    //  String payload = "error";
-    ////   if (httpCode > 0) {
-    ////     Serial.println("RESTART MODEOUT");
-    ////      ESP.reset();
-    ////    }
-    //    if (httpCode != 200) {
-    //     Serial.println("Matrix ModeLoad " + String(url) + " fail");
-    //      payload = " HTTP ERROR ";
-    //    }
-    //    delay(350);
-    //    http.end();
-    //
-    //
-
+//
+//    Serial.println(httpCode);
+//     String payload = "error";
+//       if (httpCode > 200) {
+//         Serial.println("RESTART MODEOUT");
+//         ESP.reset();
+//       }
+//       if (httpCode != 200) {
+//        Serial.println("Matrix ModeLoad " + String(url) + " fail");
+//          payload = " HTTP ERROR ";
+//        }
+       
+        http.end();
+    
   } else Serial.println("RESTART MODEOUT");
   ESP.restart();
 }
@@ -961,36 +1049,7 @@ void setModeToURL(String modeOut) {
 //--------------------------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------------------------
-String configScrollPauseFromURL() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.setTimeout(3000);
 
-    String url1 = url;
-    http.begin(url1 + "ScrollPause");
-
-    int httpCode = http.GET();
-    String payload = "error";
-    if (httpCode > 0) {
-      payload = http.getString();
-    }
-    if (httpCode != 200) {
-      Serial.println("Config ScrollPause " + String(url) + " fail");
-      payload = " HTTP ERROR ";
-    }
-    http.end();
-
-
-    Serial.println("Config ScrollPause = " + payload);
-    payload.replace("\"", "");
-    // payload.toCharArray(StandMessage, payload.length() +1);
-    // int xxx = payload.toInt();
-    //return xxx;
-    if (payload == "") payload = "30";
-    return payload;
-  } else Serial.println("RESTART MODE");
-  ESP.restart();
-}
 //--------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------
 String configSpeedFromURL() {
