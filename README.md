@@ -14,15 +14,18 @@ Kurzes Video mit Vorführung: https://youtu.be/VW0sVTzDxuE
 
 Folgende Modi sind vorhanden:
 
-- 1 - wie Orginal - Text (Daten) kommt von rechts und geht nach oben - mit Uhrzeit
-- 2 - nur Uhrzeit - feststehend
-- 3 - Daten laufen von rechts nach links durch - ohne Uhrzeit
-- 4 - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
-- 5 - Daten laufen von rechts nach links durch mit Uhrzeit
-- 6 - Daten feststehend (zu lange Nachrichten werden abgeschnitten) (nur ein Wert)
-- 7 - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
-- 8 - Daten kommen von oben - gehen wieder nach unten - mit Uhrzeit
-- 9 - Display aus
+- 1  - wie Orginal - Text (Daten) kommt von rechts und geht nach oben - mit Uhrzeit
+- 2  - nur Uhrzeit - feststehend
+- 3  - Daten laufen von rechts nach links durch - ohne Uhrzeit
+- 4  - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
+- 5  - Daten laufen von rechts nach links durch mit Uhrzeit
+- 6  - Daten feststehend (zu lange Nachrichten werden abgeschnitten) (nur ein Wert)
+- 7  - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
+- 8  - Daten kommen von oben - gehen wieder nach unten - mit Uhrzeit
+- 9  - Display aus
+- 10 - alle Daten - GrowUp - GrowDown - mit Uhrzeit
+- 11 - alle Daten - kommt von links oben - GrowDown - mit Uhrzeit
+- 11 - alle Daten - kommt von links unten - geht nach recht unten - mit Uhrzeit
 
 Datumsanzeige: Ob es eine Datumsanzeige gibt, wird durch die Anzahl der verbauten Matrix-Module besimmt. Bei 2 * 4 Modulen (MAX_DEVICES=8) wird das Datum übersprungen. Erst ab 3 * 4 Modulen (MAX_DEVICES=12) wird auch das Datum neben der Uhrzeit angezeigt. Der MAX_DEVICES - Wert muss VOR der Programmierung des Wemos in das Arduino-Sketch-File (MatrixDisplayESP8266.ino) eingegeben werden.
 
