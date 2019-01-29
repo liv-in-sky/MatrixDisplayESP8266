@@ -19,7 +19,7 @@ Folgende Modi sind vorhanden:
 - 3  - Daten laufen von rechts nach links durch - ohne Uhrzeit
 - 4  - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
 - 5  - Daten laufen von rechts nach links durch mit Uhrzeit
-- 6  - Daten feststehend (zu lange Nachrichten werden abgeschnitten) (nur ein Wert)
+- 6  - Daten feststehend (zu lange Nachrichten werden abgeschnitten) (nur erster Wert)
 - 7  - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
 - 8  - Daten kommen von oben - gehen wieder nach unten - mit Uhrzeit
 - 9  - Display aus
