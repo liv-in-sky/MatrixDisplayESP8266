@@ -263,7 +263,7 @@ void setup() {
   else ESP.restart();
 
 delay(1500);
-digitalWrite(16, HIGH);
+ digitalWrite(16, HIGH);
 
 if (MAX_DEVICES<=8) { datumJa=0;}
                else if (MAX_DEVICES>8 && MAX_DEVICES<16) {datum=calcDate(now()); datumJa=1;}
@@ -311,7 +311,7 @@ void loop() {
 
     delay(500);
 
-    // setModeToURL(String(modus));
+   
   }
   String udpMessage = handleUDP();
 
@@ -323,7 +323,7 @@ void loop() {
     Serial.println("------------------Fetching data from URL...------------------------------------");
 
 
-  //  setModeToURL(1);
+   // Serial.println(setModeToURL("1"));  // TEST SENDEN ------------------------------------------------------------------
 
     settingString2 = configSettingFromURL(); // "5;1;5;3;15";
     if (settingString2 != "HTTP ERROR"){
@@ -946,88 +946,38 @@ String configSettingFromURL() {
 }
 
 //-----------------------NICHT MEHR BENUTZT----------------------------------------------------
-int loadModeFromURL() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.setTimeout(3000);
 
-    String url1 = url;
-    http.begin(url1 + "Mode");
-
-    int httpCode = http.GET();
-    String payload = "error";
-    if (httpCode > 0) {
-      payload = http.getString();
-    }
-    if (httpCode != 200) {
-      Serial.println("Matrix Setting " + String(url) + " fail");
-      payload = " HTTP ERROR ";
-    }
-
-      
-    
-    http.end();
-    payload.replace("\"", "");
-    int xxx = payload.toInt();
-    Serial.println("getState Mode setting = " + String(xxx));
-    return xxx;
-  } else Serial.println("RESTART MODE");
-  ESP.restart();
-}
 
 //--------------------------------------------------------------------------------------------------------------------
 
 
 
 //--------------------------------------------------------------------------------------------------------------------
-String configRefreshFromURL() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.setTimeout(3000);
 
-    String url1 = url;
-    http.begin(url1 + "RefreshTime");
-
-    int httpCode = http.GET();
-    String payload = "error";
-    if (httpCode > 0) {
-      payload = http.getString();
-    }
-    if (httpCode != 200) {
-      Serial.println("Config RefreshTime " + String(url) + " fail");
-      payload = " HTTP ERROR ";
-    }
-    http.end();
-
-
-    Serial.println("Config RefreshTime = " + payload);
-    payload.replace("\"", "");
-    // payload.toCharArray(refreshSeconds, payload.length() +1);
-    // int xxx = payload.toInt();
-    //return xxx;
-    if (payload == "") payload = "30";
-    return payload;
-  } else Serial.println("RESTART MODE");
-  ESP.restart();
-}
 //--------------------------------------------------------------------------------------------------------------------
 // WIRD NOCH GETESTET !!
-void setModeToURL(String modeOut) {
+String setModeToURL(String modeOut) {
   if (WiFi.status() == WL_CONNECTED) {
 
 
-    Serial.println("ModeOut: " + modeOut);
-    String url1 = url;
-    url1 = url1 + "Mode?value=";
-    url1.replace("getPlainValue", "set");
-    url1 = url1 + (String)modeOut;
- 
-    Serial.println(url1);
+   // Serial.println("ModeOut: " + modeOut);
+//    String url1 = url;
+//    url1 = url1 + "Mode?value=";
+//    url1.replace("getPlainValue", "set");
+//    url1 = url1 + (String)modeOut;
+// 
+//    Serial.println(url1);
     HTTPClient http;
     http.setTimeout(3000);
    
     http.begin("http://192.168.178.59:8087/set/controll-own.0.MATRIX.AlarmModeMatrix?value=1");
+    // String payload = http.getString();
+  
     int httpCode = http.GET();
+    Serial.println(httpCode);
+     String payload = http.getString();
+     Serial.println(payload);
+     http.end();
 //
 //    Serial.println(httpCode);
 //     String payload = "error";
@@ -1041,6 +991,7 @@ void setModeToURL(String modeOut) {
 //        }
        
         http.end();
+        return payload;
     
   } else Serial.println("RESTART MODEOUT");
   ESP.restart();
