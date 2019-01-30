@@ -11,6 +11,7 @@ Ich benutze IOBroker - es kann aber jeder WebServer, der  "httpget" empfangen ka
 + Fehleranzeige bei falschen Setting-Daten
 ```
 Kurzes Video mit Vorführung: https://youtu.be/VW0sVTzDxuE
+
 ein weiteres Video zeigt nur die verschiedenen Modi: https://youtu.be/n5MVQeNUJ1E
 
 Folgende Modi sind vorhanden:
