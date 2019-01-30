@@ -14,18 +14,27 @@ Kurzes Video mit Vorführung: https://youtu.be/VW0sVTzDxuE
 
 Folgende Modi sind vorhanden:
 
-- 1  - wie Orginal - Text (Daten) kommt von rechts und geht nach oben - mit Uhrzeit
+- 1  - alle Daten - kommt von rechts und geht nach oben - mit Uhrzeit
 - 2  - nur Uhrzeit - feststehend
-- 3  - Daten laufen von rechts nach links durch - ohne Uhrzeit
-- 4  - Daten kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
-- 5  - Daten laufen von rechts nach links durch mit Uhrzeit
-- 6  - Daten feststehend (zu lange Nachrichten werden abgeschnitten) (nur erster Wert)
-- 7  - Daten feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - abwechselnd bei mehreren Daten
-- 8  - Daten kommen von oben - gehen wieder nach unten - mit Uhrzeit
+- 3  - alle Daten - laufen von rechts nach links durch - ohne Uhrzeit
+- 4  - alle Daten - kommen von rechts - gehen wieder nach rechts - mit Uhrzeit
+- 5  - alle Daten - laufen von rechts nach links durch - mit Uhrzeit
+- 6  - erster Teil der  feststehend (zu lange Nachrichten werden abgeschnitten) (nur erster Wert!)
+- 7  - alle Daten - feststehend und blinkend (zu lange Nachrichten werden abgeschnitten)
+- 8  - alle Daten - kommen von oben - gehen wieder nach unten - mit Uhrzeit
 - 9  - Display aus
 - 10 - alle Daten - GrowUp - GrowDown - mit Uhrzeit
-- 11 - alle Daten - kommt von links oben - GrowDown - mit Uhrzeit
-- 11 - alle Daten - kommt von links unten - geht nach recht unten - mit Uhrzeit
+- 11 - alle Daten - kommen von links oben - GrowDown - mit Uhrzeit
+- 12 - alle Daten - kommen von links unten - geht nach recht unten - mit Uhrzeit
+- 13 - alle Daten - Text wird aus einzelnen Pixeln zusammengesetzt - mit Uhrzeit
+- 14 - alle Daten - Daten werden vom Zentrum erzeugt und gelöscht - mit Uhrzeit
+- 15 - alle Daten - Daten werden von links nach rechts erzeugt und gelöscht - mit Uhrzeit
+- 16 - alle Daten - einzelne Pixel zu Text zusammengeführt und PACMAN "entsorgt" Text - mit Uhrzeit
+- 17 - alle Daten - PACMAN bringt Text und "entsorgt" Text - mit Uhrzeit
+- 18 - alle Daten - Disolve - alle Pixel leuchten - dann Text - mit Uhrzeit
+- 19 - alle Daten - Cursur - Daten werden von Cursor geführt - mit Uhrzeit
+- 20 - alle Daten - Blinds - eine Art Vorhang - ähnlich Mode 18 - mit Uhrzeit
+- 21 - alle Daten - Random  - einzelne Pixel werden zu Text zusammengeführt - mit Uhrzeit
 
 Datumsanzeige: Ob es eine Datumsanzeige gibt, wird durch die Anzahl der verbauten Matrix-Module besimmt. Bei 2 * 4 Modulen (MAX_DEVICES=8) wird das Datum übersprungen. Erst ab 3 * 4 Modulen (MAX_DEVICES=12) wird auch das Datum neben der Uhrzeit angezeigt. Der MAX_DEVICES - Wert muss VOR der Programmierung des Wemos in das Arduino-Sketch-File (MatrixDisplayESP8266.ino) eingegeben werden.
 
