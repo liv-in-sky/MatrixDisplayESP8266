@@ -442,7 +442,7 @@ void loop() {
 
  //----RESET ARRAY sonst falsche Daten-------memset - sram leak!-------------------------------------     
   
-        for( int i = 0; i < valueCount;  ++i ) valueArray[i] = "11";
+        for( int i = 0; i < valueCount;  ++i ) valueArray[i] = "";
  //--------------------------------------------------------------------------------------------------   
 
     String valueString = loadDataFromURL(); //"123;123;456";
@@ -1140,7 +1140,7 @@ case 13:  {
             }
             // //memset(valueArray,0,sizeof(valueArray));
             P.displayReset();
-            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_BLINDS, PA_BLINDS);//PA_GROW_UP  String(scrollSpeed).toInt()
+            P.displayText(curMessage, scrollAlign, 50, String(scrollPause).toInt() * 1000, PA_BLINDS, PA_BLINDS);//PA_GROW_UP  String(scrollSpeed).toInt()
             // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
             P.displayAnimate();
           }
