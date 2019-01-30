@@ -48,7 +48,7 @@ MD_Parola P = MD_Parola(HARDWARE_TYPE, DATA_PIN, CLK_PIN, CS_PIN, MAX_DEVICES);
 //uint8_t line[] = {4,  0, 8, 8, 8 };
 //uint8_t plus[] = {5, 8, 8, 62, 8, 8};
 //uint8_t block[] =  {3, 255, 255, 255};
-//uint8_t heart[] = {5, 28, 62, 124, 62, 28};
+uint8_t heart[] = {5, 28, 62, 124, 62, 28};
 
 char curMessage[75];
 
@@ -180,9 +180,36 @@ void utf8Ascii(char* s)
   *cp = '\0';   // terminate the new string
 }
 
+// Sprite Definitions
+const uint8_t F_PMAN1 = 6;
+const uint8_t W_PMAN1 = 8;
+static const uint8_t PROGMEM pacman1[F_PMAN1 * W_PMAN1] =  // gobbling pacman animation
+{
+  0x00, 0x81, 0xc3, 0xe7, 0xff, 0x7e, 0x7e, 0x3c,
+  0x00, 0x42, 0xe7, 0xe7, 0xff, 0xff, 0x7e, 0x3c,
+  0x24, 0x66, 0xe7, 0xff, 0xff, 0xff, 0x7e, 0x3c,
+  0x3c, 0x7e, 0xff, 0xff, 0xff, 0xff, 0x7e, 0x3c,
+  0x24, 0x66, 0xe7, 0xff, 0xff, 0xff, 0x7e, 0x3c,
+  0x00, 0x42, 0xe7, 0xe7, 0xff, 0xff, 0x7e, 0x3c,
+};
 
+const uint8_t F_PMAN2 = 6;
+const uint8_t W_PMAN2 = 18;
+static const uint8_t PROGMEM pacman2[F_PMAN2 * W_PMAN2] =  // ghost pursued by a pacman
+{
+  0x00, 0x81, 0xc3, 0xe7, 0xff, 0x7e, 0x7e, 0x3c, 0x00, 0x00, 0x00, 0xfe, 0x7b, 0xf3, 0x7f, 0xfb, 0x73, 0xfe,
+  0x00, 0x42, 0xe7, 0xe7, 0xff, 0xff, 0x7e, 0x3c, 0x00, 0x00, 0x00, 0xfe, 0x7b, 0xf3, 0x7f, 0xfb, 0x73, 0xfe,
+  0x24, 0x66, 0xe7, 0xff, 0xff, 0xff, 0x7e, 0x3c, 0x00, 0x00, 0x00, 0xfe, 0x7b, 0xf3, 0x7f, 0xfb, 0x73, 0xfe,
+  0x3c, 0x7e, 0xff, 0xff, 0xff, 0xff, 0x7e, 0x3c, 0x00, 0x00, 0x00, 0xfe, 0x73, 0xfb, 0x7f, 0xf3, 0x7b, 0xfe,
+  0x24, 0x66, 0xe7, 0xff, 0xff, 0xff, 0x7e, 0x3c, 0x00, 0x00, 0x00, 0xfe, 0x73, 0xfb, 0x7f, 0xf3, 0x7b, 0xfe,
+  0x00, 0x42, 0xe7, 0xe7, 0xff, 0xff, 0x7e, 0x3c, 0x00, 0x00, 0x00, 0xfe, 0x73, 0xfb, 0x7f, 0xf3, 0x7b, 0xfe,
+};
 
 void setup() {
+    P.begin();
+#if ENA_SPRITE
+  P.setSpriteData(pacman1, W_PMAN1, F_PMAN1, pacman1, W_PMAN1, F_PMAN1);// pacman2, W_PMAN2, F_PMAN2);
+#endif
   pinMode(16, OUTPUT);
   digitalWrite(16, LOW);
   Serial.begin(115200);
@@ -202,18 +229,14 @@ void setup() {
   P.begin();
   P.setIntensity(intensity-1);
   P.displayClear();
+   P.displayReset();
   P.displaySuspend(false);
   //  P.addChar('$', degC);
   //  P.addChar('-', line);
   //  P.addChar('_', block);
-  //  P.addChar('§', heart);
-    P.displayText("here we go ...", PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
+   P.addChar('§', heart);
+    P.displayText("here we go ...", PA_LEFT, 15, 10, PA_PRINT, PA_PRINT);
    P.displayAnimate();
-//  String startMessage = "here we go";
-//  startMessage.toCharArray(curMessage, 16);
-//    utf8Ascii(curMessage);
-// P.displayText(curMessage, PA_LEFT, 15, 1500, scrollEffectIn, scrollEffectUp);//PA_LEFT, 25, 10, PA_PRINT, PA_PRINT);
-// P.displayAnimate();
 
   if (digitalRead(key1) == LOW || digitalRead(key2) == LOW) {
     startWifiManager = true;
@@ -231,7 +254,7 @@ void setup() {
   }
 
   //Nachdem die Config geladen wurde...
-  P.setIntensity(intensity-1);
+ // P.setIntensity(intensity-1);
 
   if (doWifiConnect() == true) {
     NTPudp.begin(localNTPport);
@@ -255,7 +278,7 @@ void setup() {
 
     WiFi.localIP().toString().toCharArray(curMessage, 16);
     utf8Ascii(curMessage);
-      P.displayText(curMessage, PA_LEFT, 15, 0, scrollEffectIn, scrollEffectUp);
+      P.displayText(curMessage, PA_RIGHT, 5, 2000, PA_RANDOM, PA_RANDOM);
      P.displayAnimate();
      //delay(3000);
     startOTAhandling();
@@ -300,7 +323,7 @@ void loop() {
   if (digitalRead(key2) == LOW) {
     delay(700);
     modus++;
-    if (modus > 12) modus = 1;
+    if (modus > 21) modus = 1;
     String yyy = (String)modus;
     yyy = "Mode: " + yyy;
     Serial.println(yyy);
@@ -352,7 +375,7 @@ void loop() {
     modusAlt = modus;
     Serial.println( "Modus von IOBROKER ist : " + String(modus));
     
-    if (modus < 0 || modus > 12) {
+    if (modus < 0 || modus > 21) {
       modus = 99;
       Serial.println( "ERROR: Mode falsch : " + String(modus));
        errorCode = errorCode <6 ? 5 : 6;
@@ -419,7 +442,7 @@ void loop() {
 
  //----RESET ARRAY sonst falsche Daten-------memset - sram leak!-------------------------------------     
   
-        for( int i = 0; i < valueCount;  ++i ) valueArray[i] = "";
+        for( int i = 0; i < valueCount;  ++i ) valueArray[i] = "11";
  //--------------------------------------------------------------------------------------------------   
 
     String valueString = loadDataFromURL(); //"123;123;456";
@@ -481,7 +504,8 @@ if (ntpSave) {
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
          if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
              
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -511,7 +535,8 @@ if (ntpSave) {
           resetCount = 0;
           String Zeit = calcTime(now());
          if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;Serial.println("Tag holen : " +datum);}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}  //Serial.println("zeithelp im case : " +String(zeitHelp));
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;  //Serial.println("zeithelp im case : " +String(zeitHelp));
 
           switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -567,7 +592,9 @@ if (ntpSave) {
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
          if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+           
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
@@ -598,7 +625,8 @@ if (ntpSave) {
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
          if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;Serial.println("Tag holen : " +datum);}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;Serial.println("zeithelp im case : " +String(zeitHelp));}
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
@@ -691,7 +719,8 @@ if (ntpSave) {
               String Zeit = calcTime(now());
               
          if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
@@ -768,7 +797,8 @@ if (ntpSave) {
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
          if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
              
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -803,7 +833,8 @@ if (ntpSave) {
             if (loopCount > valueCount || valueCount == 0) {
               String Zeit = calcTime(now());
          if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
-           } else { zeitHelp=false;}
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
              
             switch (datumJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
@@ -829,6 +860,331 @@ if (ntpSave) {
           break;
         }  
 
+case 13:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, 80, String(scrollPause).toInt() * 1000, PA_MESH, PA_MESH);//PA_GROW_UP
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+
+          break;
+        }  
+
+        case 14:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_OPENING, PA_CLOSING);//PA_GROW_UP
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+
+          break;
+        }  
+
+        case 15:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_WIPE, PA_WIPE);//PA_GROW_UP  String(scrollSpeed).toInt()
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+
+          break;
+        }  
+
+        case 16:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_RANDOM, PA_SPRITE);//PA_GROW_UP  String(scrollSpeed).toInt()
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+
+          break;
+        }  
+
+        case 17:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_SPRITE, PA_SPRITE);//PA_GROW_UP  String(scrollSpeed).toInt()
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+
+          break;
+        }  
+
+        case 18:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, 90, String(scrollPause).toInt() * 1000, PA_DISSOLVE, PA_DISSOLVE);//PA_GROW_UP  String(scrollSpeed).toInt()
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+
+          break;
+        }  
+
+      case 19:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_CLOSING_CURSOR, PA_CLOSING_CURSOR);//PA_GROW_UP  String(scrollSpeed).toInt()
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+      
+
+          break;
+}
+    case 20:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_BLINDS, PA_BLINDS);//PA_GROW_UP  String(scrollSpeed).toInt()
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+      
+
+          break;
+}
+
+    case 21:  {
+          resetCount = 0;
+          if (P.displayAnimate())
+          {
+
+            loopCount++;
+            if (loopCount > valueCount || valueCount == 0) {
+              String Zeit = calcTime(now());
+         if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;}   //wegen DATUM Umstellung   
+           } //else { zeitHelp=false;}
+     if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;
+             
+            switch (datumJa) {
+                           case 0: {Zeit.toCharArray(curMessage, 10);break;} 
+                           case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
+                           case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
+              
+         
+              loopCount = -1;
+            } else {
+              String currentValue = valueArray[loopCount];
+              currentValue.toCharArray(curMessage, currentValue.length() + 1);
+              utf8Ascii(curMessage);
+
+
+            }
+            // //memset(valueArray,0,sizeof(valueArray));
+            P.displayReset();
+            P.displayText(curMessage, scrollAlign, String(scrollSpeed).toInt(), String(scrollPause).toInt() * 1000, PA_RANDOM, PA_RANDOM);//PA_GROW_UP  String(scrollSpeed).toInt()
+            // P.displayText(curMessage, PA_LEFT, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
+            P.displayAnimate();
+          }
+      
+
+          break;
+}
       default: {
                }
     }
