@@ -539,6 +539,7 @@ if (ntpSave) {
       case 2:  {
            resetCount = 0;
            String Zeit = calcTime(now());
+           //Serial.println(String(now()));
            if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;Serial.println("Tag holen : " +datum);}}   //wegen DATUM Umstellung   
            if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;  //Serial.println("zeithelp im case : " +String(zeitHelp));
 
@@ -687,6 +688,11 @@ if (ntpSave) {
       break;}
 
       case 9: {
+//         if (P.displayAnimate()) {
+//            curMessage[0] = char(13);
+//           P.displayText(curMessage, scrollAlign, 11, 3000, scrollEffectDown, scrollEffectDown);
+//           P.displayAnimate();}
+        
           ntpSave=0;
           resetCount = 0;
          

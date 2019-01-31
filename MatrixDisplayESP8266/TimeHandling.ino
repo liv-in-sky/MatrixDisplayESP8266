@@ -36,24 +36,21 @@ unsigned long sendNTPpacket(IPAddress& address) {
 }
 
 String calcDate(time_t t) {
-         String datum;
-      int tag = day();
-      Serial.println("TIME: " + String(tag) + String(tag+1) + String(hour())+ "   " + String(summertime(t, 0)));
-      if (!summertime(t, 0) && hour() == 23 && isPM()) tag = tag +1;
-      if (tag < 10) {
-          datum = "0" + String(tag) +" ";
-      } else {
-          datum = String(tag) +" ";
-      }
-      datum = String(monthStr(month())).substring(0, 3) + "  " + datum ;
-            datum.toUpperCase();
-     return  datum ;
 
 
+      String datum;
+      if (!summertime(t, 0)) { t=t+3600; } else { t=t+7200; }
       
-//       Serial.println(hourFormat12());
-//    Serial.println(dayStr(weekday()));
-//Serial.println(monthStr(month()));
+       int tag = day(t);
+        
+      if (tag < 10) { datum = "0" + String(tag) +" ";  } else { datum = String(tag) +" "; } // "0" addieren zwischen 0 und 9 uhr AM
+          
+      Serial.println("---------------------------------HOLE DATUM-----------------------------------------------------------");
+      Serial.println("TIME: TAGAnzeige  :" + String(tag) + "   Tag-mit-now:  " + String(day(t)) + "   stunde-mit-now:  "    + String(hour(t))+ "  Sommerzeit:  " + String(summertime(t, 0)));
+     
+      datum = String(monthStr(month())).substring(0, 3) + "  " + datum ;  // nur 3 buchstaben von monat
+      datum.toUpperCase();
+   return  datum ;
 
   }
 
