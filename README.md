@@ -26,7 +26,7 @@ Folgende Modi sind vorhanden:
 - 8  - alle Daten - kommen von oben - gehen wieder nach unten - mit Uhrzeit
 - 9  - Display aus
 - 10 - alle Daten - GrowUp - GrowDown - mit Uhrzeit
-- 11 - alle Daten - kommen von links oben - GrowDown - mit Uhrzeit
+- 11 - alle Daten - kommen von links oben - GrowDown - ohne Uhrzeit
 - 12 - alle Daten - kommen von links unten - geht nach recht unten - mit Uhrzeit
 - 13 - alle Daten - Text wird aus einzelnen Pixeln zusammengesetzt - mit Uhrzeit
 - 14 - alle Daten - Daten werden vom Zentrum erzeugt und gelöscht - mit Uhrzeit
