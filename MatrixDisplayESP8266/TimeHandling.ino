@@ -45,11 +45,13 @@ String calcDate(time_t t) {
         
       if (tag < 10) { datum = "0" + String(tag) +" ";  } else { datum = String(tag) +" "; } // "0" addieren zwischen 0 und 9 uhr AM
           
-      Serial.println("---------------------------------HOLE DATUM-----------------------------------------------------------");
-      Serial.println("TIME: TAGAnzeige  :" + String(tag) + "   Tag-mit-now:  " + String(day(t)) + "   stunde-mit-now:  "    + String(hour(t))+ "  Sommerzeit:  " + String(summertime(t, 0)));
+    
      
-      datum = String(monthStr(month())).substring(0, 3) + "  " + datum ;  // nur 3 buchstaben von monat
+      datum = String(monthStr(month(t))).substring(0, 3) + "  " + datum ;  // nur 3 buchstaben von monat
       datum.toUpperCase();
+
+      Serial.println("---------------------------------HOLE DATUM-----------------------------------------------------------");
+      Serial.println("TIME: TAGAnzeige :    Tag-mit-now:  " + String(day(t)) +  "  Sommerzeit:  " + String(summertime(t, 0)) + "    DATUM: " + datum);
    return  datum ;
 
   }
