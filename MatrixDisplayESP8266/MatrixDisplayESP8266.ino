@@ -436,16 +436,22 @@ void loop() {
 
 
     String valueString = loadDataFromURL(); //"123;123;456";
+    if (valueString != "HTTP ERROR"){
+      
     char buf[valueString.length() + 1];
     valueString.toCharArray(buf, sizeof(buf));
-  //  Serial.println("buf : " + String(buf) + "  valueString :  " + valueString  );
     char *p = buf;
     char *str;
     valueCount = 0;
     while ((str = strtok_r(p, ";", &p)) != NULL) {
       valueArray[valueCount] = str;
-      valueCount++;
-    }
+      valueCount++; }
+
+    } else {
+      errorCode = 6;
+      modus = 99;}
+
+
     
     lastMillis = millis();
 
@@ -996,7 +1002,7 @@ if (ntpSave) {
      
    
      switch (errorCode) {
-          case 0: { errorMessage="REF TIME !ERROR!" ;break; }
+          case 0: { errorMessage="REFRESH DATA !ERROR!" ;break; }
           case 1: { errorMessage="BAD INTENSTITY !ERROR!" ;break; }
           case 2: { errorMessage="SCR SPEED !ERROR!" ;break; }
           case 3: { errorMessage="SCR PAUSE !ERROR!" ;break; }
@@ -1033,15 +1039,14 @@ String loadDataFromURL() {
     HTTPClient http;
     http.setTimeout(3000);
     Serial.println("getState url: " + String(url));
- //http.setReuse(true);
     http.begin(url);
     int httpCode = http.GET();
-   String payload = "error";
+    String payload = "error";
     if (httpCode > 0) {
-      payload = http.getString();
+       payload = http.getString();
     }
     if (httpCode != 200) {
-      Serial.println("HTTP " + String(url) + String(httpCode) + " fail");
+      Serial.println("HTTP " + String(url) + String(httpCode) + " Daten fail");
       payload = "HTTP ERROR";
     }
 
@@ -1055,13 +1060,12 @@ String loadDataFromURL() {
       payload = payload.substring(1, payload.length() - 1);
     }
     Serial.println("getState payload = " + payload);
- //  Serial.println(ESP.getFreeHeap(),DEC);
-  // Serial.println(String(sizeof(valueArray)));
+
     return payload;
-  } else
-    Serial.println("RESTART URL");
+  } else {
+    Serial.println("RESTART WIFI");
   ESP.restart();
-}
+}}
 
 //--------------------------------------------------------------------------------------------------------------------
 
@@ -1069,7 +1073,6 @@ String configSettingFromURL() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     http.setTimeout(3000);
-//http.setReuse(true);
     String url1 = url;
     http.begin(url1+ "Setting");
 
@@ -1079,34 +1082,22 @@ String configSettingFromURL() {
       payload = http.getString();
     }
     if (httpCode != 200) {
-      Serial.println("Setting " + String(url1) + String(httpCode) + " fail");
+      Serial.println("Setting " + String(url1) + String(httpCode) + " Setting fail");
       payload = "HTTP ERROR";
     }
     http.end();
 
-
-   // Serial.println("Config Setting = " + payload);
     payload.replace("\"", "");
-    // payload.toCharArray(Speed, payload.length() +1);
-    // int xxx = payload.toInt();
-    //return xxx;
-    // if (payload == "") payload="30";
+
     return payload;
-  } else Serial.println("RESTART MODE");
+  } else {Serial.println("RESTART WIFI");
   ESP.restart();
-}
+}}
 
 //-----------------------NICHT MEHR BENUTZT----------------------------------------------------
 
 
-//--------------------------------------------------------------------------------------------------------------------
-
-
-
-//--------------------------------------------------------------------------------------------------------------------
-
-//--------------------------------------------------------------------------------------------------------------------
-// WIRD NOCH GETESTET !!
+// WIRD NOCH GETESTET - WEMOS SENDET!!
 String setModeToURL(String modeOut) {
   if (WiFi.status() == WL_CONNECTED) {
 
@@ -1154,33 +1145,31 @@ String setModeToURL(String modeOut) {
 
 //--------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------------
-String configSpeedFromURL() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.setTimeout(3000);
-
-    String url1 = url;
-    http.begin(url1 + "ScrollSpeed");
-
-    int httpCode = http.GET();
-    String payload = "error";
-    if (httpCode > 0) {
-      payload = http.getString();
-    }
-    if (httpCode != 200) {
-      Serial.println("scrollSpeed " + String(url) + " fail");
-      payload = " HTTP ERROR ";
-    }
-    http.end();
-
-
-    Serial.println("Config scrollSpeed = " + payload);
-    payload.replace("\"", "");
-    // payload.toCharArray(Speed, payload.length() +1);
-    // int xxx = payload.toInt();
-    //return xxx;
-    if (payload == "") payload = "30";
-    return payload;
-  } else Serial.println("RESTART MODE");
-  ESP.restart();
-}
+//String configSpeedFromURL() {
+//  if (WiFi.status() == WL_CONNECTED) {
+//    HTTPClient http;
+//    http.setTimeout(3000);
+//
+//    String url1 = url;
+//    http.begin(url1 + "ScrollSpeed");
+//
+//    int httpCode = http.GET();
+//    String payload = "error";
+//    if (httpCode > 0) {
+//      payload = http.getString();
+//    }
+//    if (httpCode != 200) {
+//      Serial.println("scrollSpeed " + String(url) + " fail");
+//      payload = " HTTP ERROR ";
+//    }
+//    http.end();
+//
+//
+//    Serial.println("Config scrollSpeed = " + payload);
+//    payload.replace("\"", "");
+//
+//    if (payload == "") payload = "30";
+//    return payload;
+//  } else Serial.println("RESTART MODE");
+//  ESP.restart();
+//}
