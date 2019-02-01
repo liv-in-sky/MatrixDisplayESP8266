@@ -46,6 +46,8 @@ WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den A
 
 ![Sampleum](/MatrixDisplayESP8266/images/uml-ani-gif10.gif)
 
+![Sampleum](/MatrixDisplayESP8266/images/sonderzeichen.jpg)
+
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit! Die Schalter sind optional.Die Modi sind von 1 bis 9. Intensity (Helligkeit) geht von 1 bis 10.
 
