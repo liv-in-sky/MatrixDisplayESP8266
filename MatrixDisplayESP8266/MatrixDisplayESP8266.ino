@@ -47,8 +47,13 @@ MD_Parola P = MD_Parola(HARDWARE_TYPE, DATA_PIN, CLK_PIN, CS_PIN, MAX_DEVICES);
 //uint8_t degC[] = {5, 6 , 15 , 9 , 15 , 6 };
 //uint8_t line[] = {4,  0, 8, 8, 8 };
 //uint8_t plus[] = {5, 8, 8, 62, 8, 8};
-//uint8_t block[] =  {3, 255, 255, 255};
+
+uint8_t arrowup[] =  {5, 8, 4, 126, 4, 8};
 uint8_t heart[] = {5, 28, 62, 124, 62, 28};
+uint8_t arrowdown[] = {5, 16, 32, 126, 32, 16};
+uint8_t arrowright[] = {5, 8, 8, 42, 28, 8};
+uint8_t arrowleft[] = {5, 8, 28, 42, 8, 8};
+
 
 char curMessage[75];
 
@@ -229,9 +234,12 @@ void setup() {
    P.displayReset();
   P.displaySuspend(false);
   //  P.addChar('$', degC);
-  //  P.addChar('-', line);
-  //  P.addChar('_', block);
+    P.addChar('}', arrowdown);
+    P.addChar('{', arrowup);
    P.addChar('§', heart);
+    P.addChar('[', arrowleft);
+   P.addChar(']', arrowright);
+   
     P.displayText("here we go ...", PA_LEFT, 15, 10, PA_PRINT, PA_PRINT);
    P.displayAnimate();
 
@@ -295,7 +303,7 @@ if (MAX_DEVICES<=8) { datumJa=0;}
 void loop() {
   ArduinoOTA.handle();
  // delay (1000);
- // Serial.println(ESP.getFreeHeap(),DEC);
+ 
   if (digitalRead(key1) == LOW ) {
     if (!key1last) {
       key1last = true;
@@ -1057,7 +1065,7 @@ String loadDataFromURL() {
     }
 
      http.end();
-    
+ //  payload.replace("\"", "");
   
     if (payload.indexOf("</ret>") > 0) {
       payload = payload.substring(payload.indexOf("<ret>"));
@@ -1065,8 +1073,20 @@ String loadDataFromURL() {
     } else {
       payload = payload.substring(1, payload.length() - 1);
     }
-    Serial.println("getState payload = " + payload);
 
+    payload.replace("\\\\", "\\");
+    payload.replace("\\\"", "\"");
+
+   if  (payload.indexOf("#left")  >= 0)  {P.addChar('[', arrowleft);  payload.replace("#left", "[");}  else {P.delChar('[');}
+   if  (payload.indexOf("#up")    >= 0)  {P.addChar('{', arrowup);    payload.replace("#up", "{");}  else { P.delChar('{'); }
+   if  (payload.indexOf("#down")  >= 0)  {P.addChar('}', arrowdown);  payload.replace("#down", "}");}  else {P.delChar('}'); }
+   if  (payload.indexOf("#right") >= 0)  {P.addChar(']', arrowright); payload.replace("#right", "]");}  else { P.delChar(']'); }
+   if  (payload.indexOf("#heart") >= 0)  {P.addChar('§', heart);      payload.replace("#heart", "§");}  else {P.delChar('§'); }
+
+   if  (payload.indexOf("#heart") >= 0) Serial.println("AAAAhhhhhh");
+  
+    Serial.println("getState payload = " + payload) + payload.indexOf("#heart");
+//Serial.println(ESP.getFreeHeap(),DEC);
     return payload;
   } else {
     Serial.println("RESTART WIFI");
