@@ -46,25 +46,6 @@ WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den A
 
 ![Sampleum](/MatrixDisplayESP8266/images/uml-ani-gif10.gif)
 
-THEMA Sonderzeichen - Sonderfälle: 
-Pfeile könnten in IOBroker zur Anzeige gut gebraucht werden. Leider ist das Erstellen und Einbinden von eigenen Buchstaben sehr zeitaufwendend  (und komplex). Daher habe ich mich für eine schnelle Integration entschieden:
-folgende Sonderzeichen sind enthalten - jedoch für jedes Sonderzeichen verliert man ein anderes Standard-Zeichen. Es gilt entweder oder!
-
-Pfeil Up          ↑      Verlust von :     {
-Pfeil Down        ↓      Verlust von :     }
-Pfeil Right       →      Verlust von :     ]
-Pfeil Left        ←      Verlust von :     [
-Heart(Herz)       ❤     Verlust von :     §                       
-um jedoch allgemain diese Standard-Zeichen zu behalten, müssen die Pfeile oder das Herz folgendermaßen im IOBroker Datenpunkt eingetragen werden:
-
-#up
-#down
-#right
-#left
-#heart                                                               
- das #-Zeichen ist die Codierung.  
-
-Beispiel: Wenn also #heart im Datenpunkt eingetragen wird, ist das §-Zeichen nicht mehr auszugeben. Wenn #heart nicht auftaucht, kann das §-Zeichen benutzt werden. Sobald ein #-Zeichen + "Name" auftaucht verschwindet das geilnkte  Standard Zeichen.
 
 Die beiden Schalter für Helligkeit und Modiänderung wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit! Die Schalter sind optional.Die Modi sind von 1 bis 9. Intensity (Helligkeit) geht von 1 bis 10.
 
