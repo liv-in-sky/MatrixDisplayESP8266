@@ -38,7 +38,8 @@ Folgende Modi sind vorhanden:
 - 20 - alle Daten - Blinds - eine Art Vorhang - ähnlich Mode 18 - mit Uhrzeit
 - 21 - alle Daten - Random  - einzelne Pixel werden zu Text zusammengeführt - mit Uhrzeit
 
-Datumsanzeige: Ob es eine Datumsanzeige gibt, wird durch die Anzahl der verbauten Matrix-Module besimmt. Bei 2 * 4 Modulen (MAX_DEVICES=8) wird das Datum übersprungen. Erst ab 3 * 4 Modulen (MAX_DEVICES=12) wird auch das Datum neben der Uhrzeit angezeigt. Der MAX_DEVICES - Wert muss VOR der Programmierung des Wemos in das Arduino-Sketch-File (MatrixDisplayESP8266.ino) eingegeben werden.
+Datumsanzeige: Ob es eine Datumsanzeige gibt, wird durch die Anzahl der verbauten Matrix-Module besimmt. Bei 2 * 4 Modulen (MAX_DEVICES=8) wird das Datum übersprungen. Erst ab 3 * 4 Modulen (MAX_DEVICES=12) wird auch das Datum neben der Uhrzeit angezeigt. 
+Der MAX_DEVICES - Wert muss VOR der Programmierung des Wemos in das Arduino-Sketch-File (MatrixDisplayESP8266.ino) eingegeben werden.
 
 ![Sampleum](/MatrixDisplayESP8266/images/test-ani-gif9.gif)
 
@@ -51,7 +52,7 @@ WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den A
 
 Die beiden Schalter für Helligkeit und Modiänderung (im Orginal) wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit! Die Schalter sind optional. Die Modi sind von 1 bis 21. Intensity (Helligkeit) geht von 1 bis 10.
 
-Auch die Standardwerte, welche beim ersten Einrichten angegeben werden müssen, können bzw. müssen übergeben werden (von  z.B. IOBroker). ScrollPause, ScrollSpeed und der Wert, wie oft man die Daten abholen will (Refresh Time). ScrollSpeed:  1 bis 300; ScrollPause: 1 bis 30(sek); RefreshTime (erzeugt Taffic im Netz!): 1 bis 600 = 1 min bis 10 min).
+Auch die Standardwerte, welche beim ersten Einrichten angegeben werden müssen, können bzw. müssen übergeben werden (von  z.B. IOBroker). ScrollPause, ScrollSpeed und der Wert, wie oft man die Daten abholen will (Refresh Time). ScrollSpeed:  1 bis 300; ScrollPause: 1 bis 30(sek); RefreshTime (erzeugt Taffic im Netz!): 1 bis 600 = 1 sek bis 10 min).
 Die Daten werden wie im Orginal im folgenden Format übegeben:  xxx;yyy;zzz
 Die Standard(Config)-Werte werden wie die zu anzeigenden Daten übergeben. Z.B 5;1;60;5;20 . In der Reihenfolge bedeutend: Mode, Intensity(Helligkeit);RefreshTime;ScrollPause;ScrollSpeed
 
@@ -59,10 +60,10 @@ Im IOBRoker muss der Simple-Api-Adapter installiert sein - in diesem Beispiel mi
 
 Die Einrichtung ist wie im Orginal - es kommt eine weitere Url-Abfragen dazu.
 
-Url für Daten werden wie Orginal angelegt
+Url für Daten werden wie Orginal angelegt - z.B.:
 - http://192.168.xxx.xxx/getPlainValue/control-own.0.ESPMatrix.Matrix (IOBroker-Baum: control-own.0.ESPMatrix.**Matrix**)
 anschliessend müssen noch ein weiterer Datenpunkt in IOBroker angelegt werden. Diese muss notwendigerweise im selben Vewrzeichnis sein und wie folgt benannt werden:
-- control-own.0.ESPMatrix.**MatrixSetting**
+- control-own.0.ESPMatrix.**MatrixSetting** (wählt man anstatt "Matrix" z.B. Display -> muss der Wert mit DisplaySetting benannt werden - siehe anim. Gif - ertes Bild)
 
 Im Config-Mode des Wemos D1 wird nur eine URL angegeben (DatenURL). Bei richtiger Bennenung des zweiten Datenpunktes, wird er automatisch gefunden ! 
 
