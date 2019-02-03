@@ -38,7 +38,7 @@ String configFilename     = "sysconf.json";
     FC16_HW       ///< Use FC-16 style hardware module.
 */
 #define HARDWARE_TYPE MD_MAX72XX::FC16_HW
-#define MAX_DEVICES   8
+#define MAX_DEVICES   16
 #define CLK_PIN       D5
 #define DATA_PIN      D7
 #define CS_PIN        D8
@@ -76,7 +76,8 @@ int errorCode = 0;
 String datum;
 int datumJa=1;
 bool zeitHelp=false;
-int zeitHolen=600000;
+int zeitHolen=50000;
+int zeitHolenStandard=50000;
 String Zeit;
 String currentValue;
 bool modeAnzeige=false;
@@ -85,9 +86,9 @@ bool modeAnzeige=false;
 String settingString = "\"nein\"";
 String settingStringAlt;
 bool schalten = false;
-int modus = 2;
+int modus = 5;
 String modusLoad;
-int modusAlt = 9 ;
+int modusAlt = 5 ;
 int modusCase = 2;
 bool shutty = false;
 String errorHandle;
@@ -307,8 +308,8 @@ delay(1500);
  digitalWrite(16, HIGH);
 
      if (MAX_DEVICES<=8) { datumJa=0;}
-               else if (MAX_DEVICES>8 && MAX_DEVICES<16) {datum=calcDate(now()); datumJa=1;}
-               else {datum=calcDate(now()); datumJa=2;}
+               else if (MAX_DEVICES>8 && MAX_DEVICES<16) {datum=calcDate(now());}
+               else {datum=calcDate(now());}
 
                Zeit = calcTime(now());
 }
@@ -387,19 +388,19 @@ void loop() {
 
     modusLoad = settingsArray[0];
     modus = modusLoad.toInt();
-    if (modusAlt != modus) {shutty = false; ntpSave = true;loopCount=-1;zeitHolen=50000;modeAnzeige=false;
-    Serial.println("==========================================" + String(modus) + " ALT:  " + String(modusAlt));
+    if (modusAlt != modus) {shutty = false; ntpSave = true;loopCount=-1;zeitHolen=50;zeitHolenStandard=50000;modeAnzeige=false;
+    Serial.println("=========================================" + String(modus) + " ALT:  " + String(modusAlt));
     do {
        if (P.displayAnimate()) {
        String  yyy = (String)modus;
        yyy = "Mode: " + yyy;
-       Serial.println("=====================================ANZEIGE=====" + yyy);
+       Serial.println("===================ANZEIGE=============="+yyy+"=====================================");
        yyy.toCharArray(curMessage, yyy.length() + 1);
         P.displayReset();
-       P.displayText(curMessage, PA_CENTER, 25, 1500, PA_PRINT, PA_PRINT);
+       P.displayText(curMessage, PA_CENTER, 25, 750, PA_PRINT, PA_PRINT);
        P.displayAnimate();
        digitalWrite(16, LOW);
-       modeAnzeige=true;} else {delay(5);Serial.println("======================================DELAY 10====" + String(modus) + " ALT:  " + String(modusAlt));}
+       modeAnzeige=true;} else {delay(5);}//    Serial.println("======================================DELAY 10====" + String(modus) + " ALT:  " + String(modusAlt));
   } while (!modeAnzeige);
     
     }   //für Datumabfrage und display shutdown
@@ -510,7 +511,7 @@ if (ntpSave) {
   if (modus != 7 ) loopCountBlink = 0;
   if (modus != 10 ) loopCountBlink = 0;}
 
-  if ( modus==3 || modus==6 || modus==7 || modus==9 || modus==10 ) { zeitJa=false; } else {zeitJa=true;} //modus==2 ||
+  if ( modus==2 || modus==3 || modus==6 || modus==7 || modus==9 || modus==10 ) { zeitJa=false; } else {zeitJa=true;} //modus==2 ||
  // Serial.println("ZeitJa bei Zeit-Need :  " +String(zeitJa));
  // zeitJa=true;
   if (!shutty) P.displayShutdown(false);
@@ -520,6 +521,7 @@ if (ntpSave) {
 if (zeitJa) {
           resetCount = 0;
           zeitHolen++;
+          zeitHolenStandard=50001;
           
           if (P.displayAnimate()) {
              loopCount++;
@@ -568,10 +570,11 @@ if (zeitJa) {
       break;}
 
       case 2:  {
+         if (P.displayAnimate()) { 
            resetCount = 0;
-           zeitHolen++;
-            if (zeitHolen>37000) {
-           Zeit = calcTime(now());zeitHolen=0;Serial.println("Zeitholen RESET------------------------------------------");}
+          // zeitHolenStandard++;
+           // if (zeitHolenStandard>500) {
+           Zeit = calcTime(now());zeitHolenStandard=0;Serial.println("ZeitholenStandard RESET------------------------------------------");//}
            //Serial.println(String(now()));
            if (Zeit == "00 : 00" || (ntpSave)) { if (!zeitHelp) {datum=calcDate(now()); zeitHelp=true; ntpSave=false;Serial.println("Tag holen : " +datum);}}   //wegen DATUM Umstellung   
            if (Zeit != "00 : 00" || (!ntpSave)) zeitHelp=false;  //Serial.println("zeithelp im case : " +String(zeitHelp));
@@ -580,10 +583,11 @@ if (zeitJa) {
                            case 0: {Zeit.toCharArray(curMessage, 10);break;} 
                            case 1: {Zeit = Zeit + "  -  " +datum;Zeit.toCharArray(curMessage, 20);break;} 
                            case 2: {Zeit = Zeit + "           " +datum; Zeit.toCharArray(curMessage, 26);break;} }
-                         //  if (P.displayAnimate()) {  
-           P.displayReset();
-           P.displayText(curMessage, PA_CENTER, String(scrollSpeed).toInt(), 10, PA_PRINT, PA_PRINT);
-           P.displayAnimate();//}
+                      //  if (P.displayAnimate()) {  
+                         // Serial.println(Zeit);
+          P.displayReset();
+           P.displayText(curMessage, PA_CENTER, 2, 15000, PA_PRINT, PA_PRINT);
+           P.displayAnimate();}//}
            break;}
       
       case 3:  {
@@ -677,10 +681,6 @@ if (zeitJa) {
       break;}
 
       case 9: {
-//         if (P.displayAnimate()) {
-//            curMessage[0] = char(13);
-//           P.displayText(curMessage, scrollAlign, 11, 3000, scrollEffectDown, scrollEffectDown);
-//           P.displayAnimate();}
         
           ntpSave=0;
           resetCount = 0;
