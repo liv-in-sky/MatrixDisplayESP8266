@@ -10,7 +10,7 @@ Anleitung zum Zusammenbau sind im Orginal-Projekt zu finden. Zusätlich kann noc
 + libriary Folder entpacken und an die richtige Stelle kopieren
 + MAX_DEVICES in Datei "MatrixDisplayESP8266.ino" anpassen!!!
 + Flashen 
-+ konfigurieren wie im Orginal beschrieben - beim Einschalten des WESP muss einer der Tasten auf gedrückt werden (mit GND überbrücken)
++ konfigurieren wie im Orginal beschrieben - beim Einschalten des ESP muss einer der Tasten  gedrückt werden (mit GND überbrücken falls keine Taster vorhanden)
 ```
 
 **Zusätzlich:**
