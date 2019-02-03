@@ -50,7 +50,8 @@ WICHTIG: Umlaute funktionieren - die ZIP-Datei im libraries-Ordner muss in den A
 ![Sampleum](/MatrixDisplayESP8266/images/sonderzeichen.gif)
 
 
-Die beiden Schalter für Helligkeit und Modiänderung (im Orginal) wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit! Die Schalter sind optional. Die Modi sind von 1 bis 21. Intensity (Helligkeit) geht von 1 bis 10.
+
+Die beiden Schalter für Helligkeit und Modiänderung (im Orginal) wurden als Abfragepunkte eingeführt und sind durch IOBroker steuerbar - IOBroker dominiert das Setting und überschreibt die Schalter nach der definierten Zeit! Die Schalter sind optional. Die Modi sind von 1 bis 21. Intensity (Helligkeit) geht von 1 bis 10. Durch die Dominanz des IOBroker machen die Schalter keinen wirklichen Sinn - werden nur für Config-Mode gebraucht (erstmaliges Konfigurieren des Wemos D1 mini)
 
 Auch die Standardwerte, welche beim ersten Einrichten angegeben werden müssen, können bzw. müssen übergeben werden (von  z.B. IOBroker). ScrollPause, ScrollSpeed und der Wert, wie oft man die Daten abholen will (Refresh Time). ScrollSpeed:  1 bis 300; ScrollPause: 1 bis 30(sek); RefreshTime (erzeugt Taffic im Netz!): 1 bis 600 = 1 sek bis 10 min).
 Die Daten werden wie im Orginal im folgenden Format übegeben:  xxx;yyy;zzz
