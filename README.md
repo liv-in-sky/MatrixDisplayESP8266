@@ -2,8 +2,8 @@
 
 Ich benutze IOBroker - es kann aber jeder WebServer, der  "httpget" empfangen kann, genutzt werden.
 ```diff
--                                  WICHTIG                                  -
-In Arduino Voreinstellungen unbedingt http://arduino.esp8266.com/versions/**2.4.1**/package_esp8266com_index.json als "Zusätzliche Boardverwalter-URL einsetzen !!!!!!
+                      -                                  WICHTIG                                  -
+In Arduino Voreinstellungen unbedingt http://arduino.esp8266.com/versions/2.4.1/package_esp8266com_index.json als "Zusätzliche Boardverwalter-URL einsetzen !!!!!!
 ```
 
 **folgende Änderungen zum Orginal:**
