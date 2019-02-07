@@ -2,6 +2,10 @@
 
 Anleitung zum Zusammenbau sind im Orginal-Projekt zu finden. Zusätlich kann noch diese Seite helfen: https://www.schellenberger.biz/matrix-display-fuer-homematic-im-nachbau/
 
+
+WICHTIG
+- In Arduino Voreinstellungen unbedingt http://arduino.esp8266.com/versions/2.4.1/package_esp8266com_index.json als "Zusätzliche Boardverwalter-URL einsetzen !!!!!!
+
 **aus dem Orginal:**
 ```diff
 + Hardware zusammenbauen
