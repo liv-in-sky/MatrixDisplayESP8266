@@ -31,16 +31,16 @@ Folgende Modi sind vorhanden:
 - 7  - alle Daten - feststehend und blinkend (zu lange Nachrichten werden abgeschnitten) - ohne Uhrzeit
 - 8  - alle Daten - kommen von oben - gehen wieder nach unten - mit Uhrzeit
 - 9  - Display aus
-- 10 - alle Daten - GrowUp - GrowDown - mit Uhrzeit
+- 10 - alle Daten - GrowUp - GrowDown - ohne Uhrzeit
 - 11 - alle Daten - kommen von links oben - GrowDown - ohne Uhrzeit
 - 12 - alle Daten - kommen von links unten - geht nach recht unten - mit Uhrzeit
 - 13 - alle Daten - Text wird aus einzelnen Pixeln zusammengesetzt - mit Uhrzeit
 - 14 - alle Daten - Daten werden vom Zentrum erzeugt und gelöscht - mit Uhrzeit
-- 15 - alle Daten - Daten werden von links nach rechts erzeugt und gelöscht - mit Uhrzeit
+- 15 - alle Daten - Cuser bringt Text von links und löscht Text von links - mit Uhrzeit
 - 16 - alle Daten - einzelne Pixel zu Text zusammengeführt und PACMAN "entsorgt" Text - mit Uhrzeit
 - 17 - alle Daten - PACMAN bringt Text und "entsorgt" Text - mit Uhrzeit
 - 18 - alle Daten - Disolve - alle Pixel leuchten - dann Text - mit Uhrzeit
-- 19 - alle Daten - Cursur - Daten werden von Cursor geführt - mit Uhrzeit
+- 19 - alle Daten - Cuser bringt Text mittig und löscht Text mittig - mit Uhrzeit
 - 20 - alle Daten - Blinds - eine Art Vorhang - ähnlich Mode 18 - mit Uhrzeit
 - 21 - alle Daten - Random  - einzelne Pixel werden zu Text zusammengeführt - mit Uhrzeit
 
